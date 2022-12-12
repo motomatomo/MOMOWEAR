@@ -11,7 +11,8 @@ namespace momoWear.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.Web;
+
     public partial class tclothes
     {
         public int fid { get; set; }
@@ -31,5 +32,7 @@ namespace momoWear.Models
         public string fphotoPath { get; set; }
     
         public virtual tcategory tcategory { get; set; }
+
+        public HttpPostedFileBase photo { get; set; }
     }
 }

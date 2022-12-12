@@ -1,21 +1,24 @@
-﻿@model momoWear.Models.tclothes
+﻿
+@model momoWear.Models.tclothes
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm("Create","Product", FormMethod.Post,new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    
+
 <div class="form-horizontal">
     <h4>tclothes</h4>
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="form-group">
-        @Html.LabelFor(model => model.fid, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.fid, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.fid, "", new { @class = "text-danger" })
-        </div>
-    </div>
+
+    @Html.HiddenFor(model => model.fid)
+    @*<div class="form-group">
+            @Html.LabelFor(model => model.fid, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.fid, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.fid, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
 
     <div class="form-group">
         @Html.LabelFor(model => model.fserialNumber, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -25,15 +28,41 @@
         </div>
     </div>
 
+
+
+    @{
+        @*列出getegoryName分類中文名當作下拉選單的TEXT
+            選出gategoryID 當作動態List的Value
+              創造新品項時取Value作為getegoryId代號*@
+
+    List<SelectListItem> list = new List<SelectListItem>();
+
+    foreach (var item in ViewBag.fcategoryNameResult)
+    {
+        list.Add(new SelectListItem()
+        {
+            Text = item.fid +item.fcategoryName,
+            Value = item.fcategoryID,
+            Selected = false
+        }
+        );
+    }
+    }
+    @*下拉*@
     <div class="form-group">
         @Html.LabelFor(model => model.fcategoryID, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.fcategoryID, new { htmlAttributes = new { @class = "form-control" } })
+            @*@Html.EditorFor(model => model.fcategoryID, new { htmlAttributes = new { @class = "form-control" } })*@
+            @*讓fcategoryID他的最大數字在跟資料庫的fid數量一樣*@
+            @Html.EditorFor(model => model.fcategoryID, new { htmlAttributes = new { @class = "form-control", min = "1", max = list.Count } })
+
+            @Html.DropDownList("fcategoryName", list, htmlAttributes: new { @class = "form-control" })
+            @*todo*@
+            @Html.ActionLink("新增類別", "Create/gategory")
             @Html.ValidationMessageFor(model => model.fcategoryID, "", new { @class = "text-danger" })
         </div>
     </div>
 
-    ViewBag.fcategoryNameResult
 
     <div class="form-group">
         @Html.LabelFor(model => model.fname, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -63,7 +92,7 @@
         @Html.LabelFor(model => model.fquentity, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             @Html.EditorFor(model => model.fquentity, new { htmlAttributes = new { @class = "form-control", min = "0", max = "100" } })
-            @Html.ValidationMessageFor(model => model.fquentity, "", new { @class = "text-danger"})
+            @Html.ValidationMessageFor(model => model.fquentity, "", new { @class = "text-danger" })
         </div>
     </div>
 
@@ -79,7 +108,7 @@
         @Html.LabelFor(model => model.fsalesVolume, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             @Html.EditorFor(model => model.fsalesVolume, new { htmlAttributes = new { @class = "form-control", min = "0", max = "100" } })
-            @Html.ValidationMessageFor(model => model.fsalesVolume, "", new { @class = "text-danger"})
+            @Html.ValidationMessageFor(model => model.fsalesVolume, "", new { @class = "text-danger" })
         </div>
     </div>
 
@@ -103,7 +132,7 @@
         @Html.LabelFor(model => model.fsafetyStockLevel, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             @Html.EditorFor(model => model.fsafetyStockLevel, new { htmlAttributes = new { @class = "form-control", min = "0", max = "100" } })
-            @Html.ValidationMessageFor(model => model.fsafetyStockLevel, "", new { @class = "text-danger"})
+            @Html.ValidationMessageFor(model => model.fsafetyStockLevel, "", new { @class = "text-danger" })
         </div>
     </div>
 
@@ -123,13 +152,27 @@
         </div>
     </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.fphotoPath, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.fphotoPath, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.fphotoPath, "", new { @class = "text-danger" })
+    @*<div class="form-group">
+            @Html.LabelFor(model => model.fphotoPath, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.fphotoPath, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.fphotoPath, "", new { @class = "text-danger" })
+            </div>
+
+        </div>*@
+
+
+
+    <fieldset class=" float-lg-end col-md-6  tomatoborder">
+        <legend class="family">照片上傳</legend>
+
+        <div class="col-md-6">
+            <label for="inputFile" class="form-label">選擇產品照片</label>
+            <input type="file" class="form-control btn-outline-secondary" name="photo" id="fileid" accept="image/*">
+            <img src="" class="w-75 m-3 " id="img1" />
         </div>
-    </div>
+    </fieldset>
+
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
@@ -145,4 +188,29 @@
 
 @section Scripts {
     @*@Scripts.Render("~/bundles/jqueryval")*@
+
+    <script>
+        let fcategoryName = document.getElementById("fcategoryName");
+        let fcategoryId = document.getElementById("fcategoryId");
+        fcategoryName.addEventListener("change", fcategoryId.value = this.value);
+
+
+
+     //預覽
+            const theFile = document.querySelector('#fileid');
+            const theImg = document.querySelector('#img1')
+            theFile.addEventListener("change", function () {
+            //預覽圖片 FileReader .png、.jpeg..
+            //regular expression
+            const file = theFile.files[0]
+            //todo 判斷檔案是不是圖，可以用regular expression
+
+            const reader = new FileReader();
+            reader.addEventListener("load", function () {
+                theImg.src = this.result;
+            })
+            reader.readAsDataURL(file);
+        })
+
+    </script>
 }

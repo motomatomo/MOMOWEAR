@@ -93,7 +93,9 @@
         @Html.DisplayFor(modelItem => item.fbrand)
     </td>
     <td>
-        @Html.DisplayFor(modelItem => item.fphotoPath)
+        @*@Html.DisplayFor(modelItem => item.fphotoPath)*@
+        <img src="~/images/@item.fphotoPath" class="w-25" alt="產品圖" />
+        
     </td>
 
     <td>

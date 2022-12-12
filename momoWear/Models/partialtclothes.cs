@@ -16,7 +16,8 @@ namespace momoWear.Models
             [DisplayName("對外代號")]
             public string fserialNumber { get; set; }
 
-            [DisplayName("類別代號")]
+            [DisplayName("內分類代號")]
+            [Range(0, 30, ErrorMessage = "分類代號在0-30之間")]
             public Nullable<int> fcategoryID { get; set; }
 
             [Required(ErrorMessage = "必填")]
@@ -59,7 +60,7 @@ namespace momoWear.Models
             [DisplayName("內類別代號")]
             public virtual tcategory tcategory { get; set; }
 
-            //public HttpPostedFileBase photo { get; set; }
+            
 
 
         }

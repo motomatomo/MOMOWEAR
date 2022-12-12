@@ -1,6 +1,7 @@
 ﻿using momoWear.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -27,7 +28,13 @@ namespace momoWear.Controllers
         /// <returns></returns>
         public ActionResult Create()
         {
-            ViewBag.fcategoryNameResult = db.tcategory.Select(m=>m.fcategoryName);
+            var bag = db.tcategory;
+            if (bag!= null)
+            {
+                // 新增物件到 Viewbag
+                ViewBag.fcategoryNameResult= bag;
+            }
+            
             return View();
         }
 
@@ -39,14 +46,33 @@ namespace momoWear.Controllers
         [HttpPost]
         public ActionResult Create(tclothes c)
         {
-            if (ModelState.IsValid)
+            //HttpPostedFileBase photo= Request.Files["photo"];
+            var bag = db.tcategory;
+            if (bag != null)
             {
-                db.tclothes.Add(c);
-                db.SaveChanges();
-                return RedirectToAction("List");
+                // 新增物件到 Viewbag
+                ViewBag.fcategoryNameResult = bag;
             }
+
+            //if (!ModelState.IsValid)return View(c);
+       
            
-            return View(c);
+            if (c.photo!=null)
+            {
+                string name = Guid.NewGuid().ToString() + ".jpg";
+
+                string photoPath = Path.Combine(Server.MapPath("~/images"), name);
+                c.photo.SaveAs(photoPath);
+                c.fphotoPath = name;
+                db.tclothes.Add(c);
+                db.SaveChanges();   
+            }
+
+            return RedirectToAction("List");
+
+
+
+
         }
     }
     
