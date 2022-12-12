@@ -14,7 +14,7 @@
     <Key>
       <PropertyRef Name="fid" />
     </Key>
-    <Property Name="fid" Type="int" Nullable="false" />
+    <Property Name="fid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="fcategoryID" Type="nvarchar" MaxLength="50" />
     <Property Name="fcategoryName" Type="nchar" MaxLength="10" />
     <Property Name="fmodifiedDate" Type="datetime" />

@@ -74,6 +74,29 @@ namespace momoWear.Controllers
 
 
         }
+
+        /// <summary>
+        /// 新增類別
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult CreateGategory() 
+        {
+            return View();
+        }
+
+       [HttpPost]
+        public ActionResult CreateGategory(tcategory newCategory)
+        {
+            var bag = db.tcategory.Add(newCategory);
+            db.SaveChanges();
+            if (bag != null)
+            {
+                // 新增物件到 Viewbag
+                ViewBag.fcategoryNameResult = bag;
+            }
+
+            return RedirectToAction("Create");
+        }
     }
     
 }

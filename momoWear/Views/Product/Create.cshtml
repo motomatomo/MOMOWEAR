@@ -58,7 +58,7 @@
 
             @Html.DropDownList("fcategoryName", list, htmlAttributes: new { @class = "form-control" })
             @*todo*@
-            @Html.ActionLink("新增類別", "Create/gategory")
+            @Html.ActionLink("新增類別", "CreateGategory")
             @Html.ValidationMessageFor(model => model.fcategoryID, "", new { @class = "text-danger" })
         </div>
     </div>
