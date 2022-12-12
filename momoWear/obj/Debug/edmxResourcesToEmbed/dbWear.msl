@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="MOMOWearModelStoreContainer" CdmEntityContainer="MOMOWearEntities">
+    <EntitySetMapping Name="sysdiagrams">
+      <EntityTypeMapping TypeName="MOMOWearModel.sysdiagrams">
+        <MappingFragment StoreEntitySet="sysdiagrams">
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+          <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+          <ScalarProperty Name="version" ColumnName="version" />
+          <ScalarProperty Name="definition" ColumnName="definition" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tcategory">
+      <EntityTypeMapping TypeName="MOMOWearModel.tcategory">
+        <MappingFragment StoreEntitySet="tcategory">
+          <ScalarProperty Name="fid" ColumnName="fid" />
+          <ScalarProperty Name="fcategoryID" ColumnName="fcategoryID" />
+          <ScalarProperty Name="fcategoryName" ColumnName="fcategoryName" />
+          <ScalarProperty Name="fmodifiedDate" ColumnName="fmodifiedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tclothes">
+      <EntityTypeMapping TypeName="MOMOWearModel.tclothes">
+        <MappingFragment StoreEntitySet="tclothes">
+          <ScalarProperty Name="fid" ColumnName="fid" />
+          <ScalarProperty Name="fserialNumber" ColumnName="fserialNumber" />
+          <ScalarProperty Name="fcategoryID" ColumnName="fcategoryID" />
+          <ScalarProperty Name="fname" ColumnName="fname" />
+          <ScalarProperty Name="fcolor" ColumnName="fcolor" />
+          <ScalarProperty Name="fsize" ColumnName="fsize" />
+          <ScalarProperty Name="fquentity" ColumnName="fquentity" />
+          <ScalarProperty Name="fdescribe" ColumnName="fdescribe" />
+          <ScalarProperty Name="fsalesVolume" ColumnName="fsalesVolume" />
+          <ScalarProperty Name="fprice" ColumnName="fprice" />
+          <ScalarProperty Name="fsalesdate" ColumnName="fsalesdate" />
+          <ScalarProperty Name="fsafetyStockLevel" ColumnName="fsafetyStockLevel" />
+          <ScalarProperty Name="fmodifiedDate" ColumnName="fmodifiedDate" />
+          <ScalarProperty Name="fbrand" ColumnName="fbrand" />
+          <ScalarProperty Name="fphotoPath" ColumnName="fphotoPath" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tcustomer">
+      <EntityTypeMapping TypeName="MOMOWearModel.tcustomer">
+        <MappingFragment StoreEntitySet="tcustomer">
+          <ScalarProperty Name="fid" ColumnName="fid" />
+          <ScalarProperty Name="foutId" ColumnName="foutId" />
+          <ScalarProperty Name="fcustomerName" ColumnName="fcustomerName" />
+          <ScalarProperty Name="fcustomerPhone" ColumnName="fcustomerPhone" />
+          <ScalarProperty Name="faddress" ColumnName="faddress" />
+          <ScalarProperty Name="fcustomerBirth" ColumnName="fcustomerBirth" />
+          <ScalarProperty Name="flineAcc" ColumnName="flineAcc" />
+          <ScalarProperty Name="fstatus" ColumnName="fstatus" />
+          <ScalarProperty Name="note" ColumnName="note" />
+          <ScalarProperty Name="ffacebookId" ColumnName="ffacebookId" />
+          <ScalarProperty Name="fAddtime" ColumnName="fAddtime" />
+          <ScalarProperty Name="fmodifytime" ColumnName="fmodifytime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="torder">
+      <EntityTypeMapping TypeName="MOMOWearModel.torder">
+        <MappingFragment StoreEntitySet="torder">
+          <ScalarProperty Name="fid" ColumnName="fid" />
+          <ScalarProperty Name="forderDate" ColumnName="forderDate" />
+          <ScalarProperty Name="fcustomerId" ColumnName="fcustomerId" />
+          <ScalarProperty Name="fnote" ColumnName="fnote" />
+          <ScalarProperty Name="fstatus" ColumnName="fstatus" />
+          <ScalarProperty Name="foutOrderId" ColumnName="foutOrderId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="torderdetail">
+      <EntityTypeMapping TypeName="MOMOWearModel.torderdetail">
+        <MappingFragment StoreEntitySet="torderdetail">
+          <ScalarProperty Name="fid" ColumnName="fid" />
+          <ScalarProperty Name="fproductName" ColumnName="fproductName" />
+          <ScalarProperty Name="fproductPrice" ColumnName="fproductPrice" />
+          <ScalarProperty Name="fquantity" ColumnName="fquantity" />
+          <ScalarProperty Name="forderId" ColumnName="forderId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

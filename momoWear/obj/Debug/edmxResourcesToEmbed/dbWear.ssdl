@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MOMOWearModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="tcategory">
+    <Key>
+      <PropertyRef Name="fid" />
+    </Key>
+    <Property Name="fid" Type="int" Nullable="false" />
+    <Property Name="fcategoryID" Type="nvarchar" MaxLength="50" />
+    <Property Name="fcategoryName" Type="nchar" MaxLength="10" />
+    <Property Name="fmodifiedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="tclothes">
+    <Key>
+      <PropertyRef Name="fid" />
+    </Key>
+    <Property Name="fid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="fserialNumber" Type="nvarchar" MaxLength="50" />
+    <Property Name="fcategoryID" Type="int" />
+    <Property Name="fname" Type="nvarchar" MaxLength="100" />
+    <Property Name="fcolor" Type="nvarchar" MaxLength="50" />
+    <Property Name="fsize" Type="nvarchar" MaxLength="50" />
+    <Property Name="fquentity" Type="int" />
+    <Property Name="fdescribe" Type="nvarchar(max)" />
+    <Property Name="fsalesVolume" Type="int" />
+    <Property Name="fprice" Type="money" />
+    <Property Name="fsalesdate" Type="datetime" />
+    <Property Name="fsafetyStockLevel" Type="smallint" />
+    <Property Name="fmodifiedDate" Type="datetime" />
+    <Property Name="fbrand" Type="nvarchar" MaxLength="50" />
+    <Property Name="fphotoPath" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="tcustomer">
+    <Key>
+      <PropertyRef Name="fid" />
+    </Key>
+    <Property Name="fid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="foutId" Type="nvarchar" MaxLength="50" />
+    <Property Name="fcustomerName" Type="nvarchar" MaxLength="50" />
+    <Property Name="fcustomerPhone" Type="nvarchar" MaxLength="50" />
+    <Property Name="faddress" Type="nvarchar(max)" />
+    <Property Name="fcustomerBirth" Type="datetime" />
+    <Property Name="flineAcc" Type="nvarchar" MaxLength="50" />
+    <Property Name="fstatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="note" Type="nvarchar(max)" />
+    <Property Name="ffacebookId" Type="nvarchar(max)" />
+    <Property Name="fAddtime" Type="datetime" />
+    <Property Name="fmodifytime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="torder">
+    <Key>
+      <PropertyRef Name="fid" />
+    </Key>
+    <Property Name="fid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="forderDate" Type="datetime" />
+    <Property Name="fcustomerId" Type="nvarchar" MaxLength="50" />
+    <Property Name="fnote" Type="nvarchar" MaxLength="300" />
+    <Property Name="fstatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="foutOrderId" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="torderdetail">
+    <Key>
+      <PropertyRef Name="fid" />
+    </Key>
+    <Property Name="fid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="fproductName" Type="nvarchar(max)" />
+    <Property Name="fproductPrice" Type="money" />
+    <Property Name="fquantity" Type="int" />
+    <Property Name="forderId" Type="int" />
+  </EntityType>
+  <Association Name="FK_tclothes_tcategory">
+    <End Role="tcategory" Type="Self.tcategory" Multiplicity="0..1" />
+    <End Role="tclothes" Type="Self.tclothes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tcategory">
+        <PropertyRef Name="fid" />
+      </Principal>
+      <Dependent Role="tclothes">
+        <PropertyRef Name="fcategoryID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="MOMOWearModelStoreContainer">
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tcategory" EntityType="Self.tcategory" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tclothes" EntityType="Self.tclothes" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tcustomer" EntityType="Self.tcustomer" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="torder" EntityType="Self.torder" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="torderdetail" EntityType="Self.torderdetail" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_tclothes_tcategory" Association="Self.FK_tclothes_tcategory">
+      <End Role="tcategory" EntitySet="tcategory" />
+      <End Role="tclothes" EntitySet="tclothes" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,107 @@
+﻿@model IEnumerable<momoWear.Models.tclothes>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.fserialNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tcategory.fcategoryID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fcolor)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fsize)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fquentity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fdescribe)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fsalesVolume)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fprice)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fsalesdate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fsafetyStockLevel)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fmodifiedDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fbrand)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fphotoPath)
+        </th>
+
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.fserialNumber)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.tcategory.fcategoryID)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.fname)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.fcolor)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.fsize)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.fquentity)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.fdescribe)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.fsalesVolume)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.fprice)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.fsalesdate)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.fsafetyStockLevel)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.fmodifiedDate)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.fbrand)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.fphotoPath)
+    </td>
+
+    <td>
+        @Html.ActionLink("Edit", "Edit", new { id = item.fid }) |
+        @Html.ActionLink("Details", "Details", new { id = item.fid }) |
+        @Html.ActionLink("Delete", "Delete", new { id = item.fid })
+    </td>
+</tr>
+}
+
+</table>

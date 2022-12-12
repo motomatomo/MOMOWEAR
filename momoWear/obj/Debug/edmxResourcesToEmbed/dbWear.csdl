@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MOMOWearModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="tcategory">
+    <Key>
+      <PropertyRef Name="fid" />
+    </Key>
+    <Property Name="fid" Type="Int32" Nullable="false" />
+    <Property Name="fcategoryID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fcategoryName" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="fmodifiedDate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="tclothes" Relationship="Self.FK_tclothes_tcategory" FromRole="tcategory" ToRole="tclothes" />
+  </EntityType>
+  <EntityType Name="tclothes">
+    <Key>
+      <PropertyRef Name="fid" />
+    </Key>
+    <Property Name="fid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fserialNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fcategoryID" Type="Int32" />
+    <Property Name="fname" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="fcolor" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fsize" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fquentity" Type="Int32" />
+    <Property Name="fdescribe" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="fsalesVolume" Type="Int32" />
+    <Property Name="fprice" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="fsalesdate" Type="DateTime" Precision="3" />
+    <Property Name="fsafetyStockLevel" Type="Int16" />
+    <Property Name="fmodifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="fbrand" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fphotoPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="tcategory" Relationship="Self.FK_tclothes_tcategory" FromRole="tclothes" ToRole="tcategory" />
+  </EntityType>
+  <EntityType Name="tcustomer">
+    <Key>
+      <PropertyRef Name="fid" />
+    </Key>
+    <Property Name="fid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="foutId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fcustomerName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fcustomerPhone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="faddress" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="fcustomerBirth" Type="DateTime" Precision="3" />
+    <Property Name="flineAcc" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fstatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ffacebookId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="fAddtime" Type="DateTime" Precision="3" />
+    <Property Name="fmodifytime" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="torder">
+    <Key>
+      <PropertyRef Name="fid" />
+    </Key>
+    <Property Name="fid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="forderDate" Type="DateTime" Precision="3" />
+    <Property Name="fcustomerId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fnote" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="fstatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="foutOrderId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="torderdetail">
+    <Key>
+      <PropertyRef Name="fid" />
+    </Key>
+    <Property Name="fid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fproductName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="fproductPrice" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="fquantity" Type="Int32" />
+    <Property Name="forderId" Type="Int32" />
+  </EntityType>
+  <Association Name="FK_tclothes_tcategory">
+    <End Role="tcategory" Type="Self.tcategory" Multiplicity="0..1" />
+    <End Role="tclothes" Type="Self.tclothes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tcategory">
+        <PropertyRef Name="fid" />
+      </Principal>
+      <Dependent Role="tclothes">
+        <PropertyRef Name="fcategoryID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="MOMOWearEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <EntitySet Name="tcategory" EntityType="Self.tcategory" />
+    <EntitySet Name="tclothes" EntityType="Self.tclothes" />
+    <EntitySet Name="tcustomer" EntityType="Self.tcustomer" />
+    <EntitySet Name="torder" EntityType="Self.torder" />
+    <EntitySet Name="torderdetail" EntityType="Self.torderdetail" />
+    <AssociationSet Name="FK_tclothes_tcategory" Association="Self.FK_tclothes_tcategory">
+      <End Role="tcategory" EntitySet="tcategory" />
+      <End Role="tclothes" EntitySet="tclothes" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
