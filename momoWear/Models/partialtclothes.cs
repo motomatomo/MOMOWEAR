@@ -12,25 +12,28 @@ namespace momoWear.Models
     {
         public class tclothesMetaData 
         {
-            public int fid { get; set; }
+            public int? fid { get; set; }
             [DisplayName("對外代號")]
             public string fserialNumber { get; set; }
 
             [DisplayName("內分類代號")]
-            [Range(0, 30, ErrorMessage = "分類代號在0-30之間")]
+            //[Range(0, 30, ErrorMessage = "分類代號在0-30之間")]
             public Nullable<int> fcategoryID { get; set; }
 
-            [Required(ErrorMessage = "必填")]
+            [Required(ErrorMessage = "品名為必填")]
             [DisplayName("品名") ] 
             public string fname { get; set; }
 
+            [Required(ErrorMessage = "顏色為必填")]
             [DisplayName("顏色")]
             public string fcolor { get; set; }
 
+            [Required(ErrorMessage = "尺寸為必填")]
             [DisplayName("尺寸")]
             public string fsize { get; set; }
 
             [DisplayName("數量")]
+            [Required(ErrorMessage = "數量為必填")]
             [Range(0,150,ErrorMessage ="數量在0-150之間") ]
             public Nullable<int> fquentity { get; set; }
 
@@ -39,6 +42,8 @@ namespace momoWear.Models
 
             [DisplayName("已銷售量")]
             public Nullable<int> fsalesVolume { get; set; }
+
+            [Required(ErrorMessage = "價格為必填")]
             [DisplayName("價格")]
             public Nullable<decimal> fprice { get; set; }
 

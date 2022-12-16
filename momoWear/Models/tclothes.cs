@@ -15,7 +15,7 @@ namespace momoWear.Models
 
     public partial class tclothes
     {
-        public int fid { get; set; }
+        public int? fid { get; set; }
         public string fserialNumber { get; set; }
         public Nullable<int> fcategoryID { get; set; }
         public string fname { get; set; }
