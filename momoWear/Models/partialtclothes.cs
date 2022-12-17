@@ -12,11 +12,12 @@ namespace momoWear.Models
     {
         public class tclothesMetaData 
         {
-            public int? fid { get; set; }
+            public int fid { get; set; }
             [DisplayName("對外代號")]
             public string fserialNumber { get; set; }
 
             [DisplayName("內分類代號")]
+            [Required(ErrorMessage = "分類代號為必選")]
             //[Range(0, 30, ErrorMessage = "分類代號在0-30之間")]
             public Nullable<int> fcategoryID { get; set; }
 
@@ -48,12 +49,14 @@ namespace momoWear.Models
             public Nullable<decimal> fprice { get; set; }
 
             [DisplayName("販售日")]
+            [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy/MM/dd}")]
             public Nullable<System.DateTime> fsalesdate { get; set; }
 
             [DisplayName("可銷售庫存")]
             public Nullable<short> fsafetyStockLevel { get; set; }
 
             [DisplayName("修改日")]
+            [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy/MM/dd}")]
             public Nullable<System.DateTime> fmodifiedDate { get; set; }
 
             [DisplayName("品牌")]

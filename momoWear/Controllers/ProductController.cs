@@ -13,6 +13,8 @@ namespace momoWear.Controllers
     {
         // GET: Product
         MOMOWearEntities db = new MOMOWearEntities();
+
+         
         /// <summary>
         /// List 所有列表
         /// </summary>
@@ -68,7 +70,7 @@ namespace momoWear.Controllers
         /// <param name="c"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult Create(tclothes c)
+        public ActionResult Create([Bind(Exclude = "fid")] tclothes c)
         {
             //HttpPostedFileBase photo= Request.Files["photo"];
             var bag = db.tcategory;
@@ -97,21 +99,35 @@ namespace momoWear.Controllers
 
             } 
             
+
             if (c.photo != null)
             {
-                string name = Guid.NewGuid().ToString() + ".jpg";
 
-                string photoPath = Path.Combine(Server.MapPath("~/images"), name);
-                c.photo.SaveAs(photoPath);
-                c.fphotoPath = name;
-                db.tclothes.Add(c);
-                db.SaveChanges();
+                var fileValid = true;
+                // Limit File Szie Below : 10MB
+                if (c.photo.ContentLength <= 0 || c.photo.ContentLength > 10475760)
+                {
+                    fileValid = false;
+                    ViewBag.ContentLength = "Limit File Szie Below : 10MB";
+                }
+                if (fileValid == true)
+                {
+                    string name = Guid.NewGuid().ToString() + ".jpg";
+
+                    string photoPath = Path.Combine(Server.MapPath("~/images"), name);
+                    c.photo.SaveAs(photoPath);
+                    c.fphotoPath = name;
+                    db.tclothes.Add(c);
+                    db.SaveChanges();
+                   
+                }
                 return RedirectToAction("List");
             }
             else
             {
-                db.tclothes.Add(c);
-                db.SaveChanges();
+               c.fphotoPath = "no-picture.jpg";
+               db.tclothes.Add(c);
+               db.SaveChanges();
 
                 return RedirectToAction("List");
             }
@@ -150,6 +166,81 @@ namespace momoWear.Controllers
 
             return RedirectToAction("Create");
         }
+
+
+        public ActionResult Edit(int? id) 
+        {
+            if (id!=null)
+            {
+                //tclothes product = db.tclothes.FirstOrDefault(c => c.fid == (int)id);
+                tclothes product = db.tclothes.Where(c => c.fid == (int)id).FirstOrDefault();
+                var bag = db.tcategory;
+                if (bag != null)
+                {
+                    //原來新增物件到 Viewbag
+                    ViewBag.fcategoryNameResult = bag;
+                    return View(product);
+                }
+            }
+            return RedirectToAction("List");
+        
+        }
+
+        [HttpPost]
+        public ActionResult Edit(tclothes editedProduct)
+        {
+            if (ModelState.IsValid)
+            {
+                tclothes product = db.tclothes.FirstOrDefault(c => c.fid == (int)editedProduct.fid);
+
+                if (product != null)
+                {
+
+                    if (editedProduct.photo != null)
+                    {
+                        var fileValid = true;
+                        // Limit File Szie Below : 10MB
+                        if (editedProduct.photo.ContentLength <= 0 || editedProduct.photo.ContentLength > 10475760)
+                        {
+                            fileValid = false;
+                            ViewBag.ContentLength = "檔案上傳請低於: 10MB";
+                        }
+                        if (fileValid == true)
+                        {
+                            string photoName = Guid.NewGuid().ToString()+".jpg";
+                            string photoSavePath = Path.Combine(Server.MapPath("~/images"), photoName);
+                            //存照片
+                            editedProduct.photo.SaveAs(photoSavePath);
+                            //選出來的產品的圖片路徑改成新的圖檔的檔名
+                            product.fphotoPath = photoName;
+                        }  
+                    }
+                    else
+                    {
+                        product.fphotoPath = editedProduct.fphotoPath;
+                    }
+
+                    product.fserialNumber = editedProduct.fserialNumber;
+                    product.fcategoryID = editedProduct.fcategoryID;
+                    product.fname = editedProduct.fname;
+                    product.fsize = editedProduct.fsize;
+                    product.fquentity = editedProduct.fquentity;
+                    product.fdescribe = editedProduct.fdescribe;
+                    product.fsalesVolume = editedProduct.fsalesVolume;
+                    product.fprice = editedProduct.fprice;
+                    product.fsalesdate =editedProduct.fsalesdate;
+                    product.fsafetyStockLevel = editedProduct.fsafetyStockLevel;
+                    product.fmodifiedDate = editedProduct.fmodifiedDate;
+
+                    db.SaveChanges();
+
+                }
+                return RedirectToAction("List");
+            }
+            return View(editedProduct);
+
+        }
+
     }
     
 }
