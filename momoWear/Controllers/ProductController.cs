@@ -241,6 +241,24 @@ namespace momoWear.Controllers
 
         }
 
+        public ActionResult Delete(int? id)
+        {
+            if (id != null)
+            {
+                tclothes prod = db.tclothes.FirstOrDefault(p => p.fid == (int)id);
+                if (prod != null)
+                {
+                    db.tclothes.Remove(prod);
+                    db.SaveChanges();
+                }
+            }
+
+            return RedirectToAction("List");
+        }
+
+
+
+
     }
     
 }

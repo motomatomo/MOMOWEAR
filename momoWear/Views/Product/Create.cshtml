@@ -10,7 +10,7 @@
 <div class="form-horizontal">
     <h4>tclothes</h4>
     <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
     @*@Html.HiddenFor(model => model.fid)*@
     <div class="form-group" hidden>
@@ -58,9 +58,9 @@
             @*@Html.EditorFor(model => model.fcategoryID, new { htmlAttributes = new { @class = "form-control" } })*@
             @*讓fcategoryID他的最大數字在跟資料庫的fid數量一樣*@
             @Html.EditorFor(model => model.fcategoryID, new { htmlAttributes = new { @class = "form-control", min = "1", max = list.Count, @readonly = "readonly" } })
-            @Html.ValidationMessageFor(model => model.fcategoryID, "", new { @class = "text-danger" })
-            @Html.DropDownList("fcategoryName", list, htmlAttributes: new { @class = "form-control" })
 
+            @Html.DropDownList("fcategoryName", list, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.fcategoryID, "", new { @class = "text-danger" })
             @Html.ActionLink("新增類別", "CreateGategory")
 
         </div>

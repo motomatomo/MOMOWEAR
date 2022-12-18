@@ -18,7 +18,6 @@ namespace momoWear.Models
 
             [DisplayName("內分類代號")]
             [Required(ErrorMessage = "分類代號為必選")]
-            //[Range(0, 30, ErrorMessage = "分類代號在0-30之間")]
             public Nullable<int> fcategoryID { get; set; }
 
             [Required(ErrorMessage = "品名為必填")]
