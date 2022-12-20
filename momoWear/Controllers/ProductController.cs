@@ -8,11 +8,13 @@ using System.Web.Mvc;
 
 
 namespace momoWear.Controllers
-{
+{   
+    [Authorize(Users = "tingyang@gmail.com,motomato914@gmail.com")]
     public class ProductController : Controller
     {
         // GET: Product
         MOMOWearEntities db = new MOMOWearEntities();
+
 
          
         /// <summary>
@@ -25,7 +27,18 @@ namespace momoWear.Controllers
                        select p;
             //var list = db.tclothes.ToList();
 
+            getName();
+
             return View(list);
+        }
+
+        private void getName()
+        {
+            //若驗證通過 夾帶使用者名稱
+            if (User.Identity.IsAuthenticated)
+            {
+                ViewBag.userName = User.Identity.Name;
+            }
         }
 
 
@@ -33,7 +46,7 @@ namespace momoWear.Controllers
         /// 新增產品 GET
         /// </summary>
         /// <returns></returns>
-       
+
         public ActionResult Create()
         {
             //我想要把兩個欄位都放在TEXT裡失敗 改天再試
@@ -60,7 +73,7 @@ namespace momoWear.Controllers
                 //ViewBag.fcategoryName = new SelectList(db.tcategory, "fid", "fcategoryName");
 
             }
-
+            getName();
             return View();
         }
 
@@ -146,6 +159,7 @@ namespace momoWear.Controllers
         /// <returns></returns>
         public ActionResult CreateGategory() 
         {
+            getName();
             return View();
         }
         /// <summary>
@@ -156,14 +170,17 @@ namespace momoWear.Controllers
         [HttpPost]
         public ActionResult CreateGategory(tcategory newCategory)
         {
-            var bag = db.tcategory.Add(newCategory);
-            db.SaveChanges();
-            if (bag != null)
+            if (!ModelState.IsValid)
             {
-                // 新增物件到 Viewbag 這樣新增類別後才會帶到Create.cshtml頁面顯示
-                ViewBag.fcategoryNameResult = bag;
+                var bag = db.tcategory.Add(newCategory);
+                db.SaveChanges();
+                if (bag != null)
+                {
+                    // 新增物件到 Viewbag 這樣新增類別後才會帶到Create.cshtml頁面顯示
+                    ViewBag.fcategoryNameResult = bag;
+                }
+                getName();
             }
-
             return RedirectToAction("Create");
         }
 
@@ -182,6 +199,7 @@ namespace momoWear.Controllers
                     return View(product);
                 }
             }
+            //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             return RedirectToAction("List");
         
         }
@@ -215,9 +233,12 @@ namespace momoWear.Controllers
                             product.fphotoPath = photoName;
                         }  
                     }
+                    
                     else
                     {
-                        product.fphotoPath = editedProduct.fphotoPath;
+                        //要等於原來SElect的照片  不能等於 NULL 
+                        //product.fphotoPath = editedProduct.fphotoPath;
+                        product.fphotoPath = product.fphotoPath;
                     }
 
                     product.fserialNumber = editedProduct.fserialNumber;

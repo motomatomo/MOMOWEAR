@@ -13,10 +13,10 @@ namespace momoWear.Models
         public class tcategoryMetaData
         {
             public int fid { get; set; }
-            //[Required(ErrorMessage = "必填")]
+            [Required(ErrorMessage = "必填")]
             [DisplayName("類別代號")]
             public string fcategoryID { get; set; }
-            //[Required(ErrorMessage = "必填")]
+            [Required(ErrorMessage = "必填")]
             [DisplayName("類別名稱")]
             public string fcategoryName { get; set; }
             [DisplayName("修改日期")]

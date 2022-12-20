@@ -34,13 +34,15 @@ namespace momoWear.Models
 
             [DisplayName("數量")]
             [Required(ErrorMessage = "數量為必填")]
-            [Range(0,150,ErrorMessage ="數量在0-150之間") ]
+            [Range(0,200,ErrorMessage = "{0} 必須在 {1}和{2}之間.") ]
             public Nullable<int> fquentity { get; set; }
 
             [DisplayName("描述")]
             public string fdescribe { get; set; }
 
             [DisplayName("已銷售量")]
+            [Range(0, 2000,ErrorMessage = "{0} 必須在 {1}和{2}之間.")]
+           
             public Nullable<int> fsalesVolume { get; set; }
 
             [Required(ErrorMessage = "價格為必填")]
@@ -52,6 +54,7 @@ namespace momoWear.Models
             public Nullable<System.DateTime> fsalesdate { get; set; }
 
             [DisplayName("可銷售庫存")]
+            [Range(0, 200, ErrorMessage = "{0} 必須在 {1}和{2}之間.")]
             public Nullable<short> fsafetyStockLevel { get; set; }
 
             [DisplayName("修改日")]
