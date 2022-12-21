@@ -62,11 +62,15 @@ namespace momoWear.Controllers
             //    //下拉是選單 精簡 1.db.t表單,2.value 3.text
             //    //ViewBag.fcategoryName = new SelectList(db.tcategory, "fcategoryName", $"{fcategoryID} {fcategoryName}");
             //}
-            var bag = db.tcategory;
-            if (bag != null)
+            var tempData = db.tcategory.ToList();
+            if (tempData != null)
             {
-                //原來新增物件到 Viewbag
-                 ViewBag.fcategoryNameResult= bag;
+                //新增類別到 TempData["fcategoryNameResult"]
+                //新增失敗要轉向回Create get方法時 只在get ViewBag下拉是選單會報錯 因為VIEWBAG不見了
+                //[HttpPost]方法也要 變成getPost兩個地方都要寫ViewBag 帶分類下拉回去 我覺得比較不聰明
+                //tempData型別是List<tcategory>
+                //ViewBag.fcategoryNameResult= tempData;
+                TempData["fcategoryNameResult"] = tempData;
 
                 //下拉是選單 精簡 1.db.t表單,2.value 3.text
                 //成功顯示 fcategoryName 但我想要下拉選單text有兩個 fcategoryID 和 fcategoryName
@@ -86,14 +90,6 @@ namespace momoWear.Controllers
         public ActionResult Create([Bind(Exclude = "fid")] tclothes c)
         {
             //HttpPostedFileBase photo= Request.Files["photo"];
-            var bag = db.tcategory;
-            if (bag != null)
-            {
-                // 新增物件到 Viewbag
-                ViewBag.fcategoryNameResult = bag;
-                //下拉是選單 精簡 1.db.t表單,2.value 3.text
-                //ViewBag.fcategoryName = new SelectList(db.tcategory, "fid","fcategoryName");
-            }
 
             if (!ModelState.IsValid) {
                 string message = string.Empty;
@@ -112,7 +108,7 @@ namespace momoWear.Controllers
 
             } 
             
-
+            //依有沒有上傳照片分類
             if (c.photo != null)
             {
 
@@ -210,13 +206,13 @@ namespace momoWear.Controllers
             if (ModelState.IsValid)
             {
                 tclothes product = db.tclothes.FirstOrDefault(c => c.fid == (int)editedProduct.fid);
-
+                //依有沒有上傳照片分類
                 if (product != null)
                 {
 
                     if (editedProduct.photo != null)
                     {
-                        var fileValid = true;
+                        bool fileValid = true;
                         // Limit File Szie Below : 10MB
                         if (editedProduct.photo.ContentLength <= 0 || editedProduct.photo.ContentLength > 10475760)
                         {
@@ -236,8 +232,8 @@ namespace momoWear.Controllers
                     
                     else
                     {
-                        //要等於原來SElect的照片  不能等於 NULL 
-                        //product.fphotoPath = editedProduct.fphotoPath;
+                        //要等於原來SElect的照片  不能等於 NULL editedProduct.fphotoPath
+                       
                         product.fphotoPath = product.fphotoPath;
                     }
 
@@ -271,6 +267,7 @@ namespace momoWear.Controllers
                 {
                     db.tclothes.Remove(prod);
                     db.SaveChanges();
+                    return RedirectToAction("List");
                 }
             }
 
