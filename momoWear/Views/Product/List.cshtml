@@ -1,8 +1,40 @@
-﻿@model IEnumerable<momoWear.Models.tclothes>
+﻿@using momoWear.Models
+@model IEnumerable<momoWear.Models.tclothes>
+
+
 @{
     ViewBag.Title = ViewBag.userName + "你好";
 }
 
+@{
+
+
+    //下拉選單選項
+    List<SelectListItem> list = new List<SelectListItem>();
+    //為了接TempData["fcategoryNameResult"]創的陣列
+    List<tcategory> listTcategory = new List<tcategory>();
+
+    foreach (var item in (TempData["fcategoryNameResult"] as List<tcategory>))
+    {
+        listTcategory.Add(item);
+
+    }
+
+
+
+    foreach (var item in listTcategory)
+    {
+        list.Add(new SelectListItem()
+        {
+            Text = "類別代號" + item.fid + " " + item.fcategoryID + " " + item.fcategoryName,
+            Value =item.fcategoryName,
+            Selected = false
+        }
+        );
+    }
+
+
+}
 
 <div class="row">
 
@@ -13,6 +45,30 @@
         <p>
             @Html.ActionLink("新增產品", "Create")
         </p>
+
+        <br /><br />
+        @using (@Html.BeginForm())
+        {
+            <select id="mpick" name="mpick" class="form-control">
+                <option>選擇搜關鍵字分類</option>
+                <option value="商品名稱" name="ProductName">商品名稱</option>
+                <option value="商品類別" name="Gategory">商品類別</option>
+                <option value="顏色" name="Color">顏色</option>
+                <option value="庫存不足商品" name="SoldOut">庫存不足商品</option>
+            </select>
+
+            @Html.DropDownList("fcategoryName", list, htmlAttributes: new { @class = "form-control" })
+
+
+            <div class="col-12 col-lg-2">
+                <input type="text" name="txtKeyword" class="form-control" value="" id="txt" placeholder="請輸入關鍵字" />
+            </div>
+            <div class="col-4 col-lg-1">
+                <input type="submit" value="查詢" id="keyWorld" class="form-control" />
+            </div>
+        }
+        <br /><br />
+
         <table class="table align-middle">
             <tr>
                 <th>
@@ -113,7 +169,7 @@
                         @Html.ActionLink("修改", "Edit", new { id = item.fid }, new { @class = "btn btn-default" })
                         @*@Html.ActionLink("Details", "Details", new { id = item.fid }) |*@
                         @*@Html.ActionLink("刪除", "Delete", "Product", new { id = item.fid}, new { @class = "btn btn-default", onclick = "return confirm('確定刪除?')" })*@
-                        @using (@Html.BeginForm("Delete","Product",FormMethod.Post))
+                        @using (@Html.BeginForm("Delete", "Product", FormMethod.Post))
                         {
                             @Html.Hidden("id", item.fid)
                             <input type="submit" value="刪除" class="btn btn-default " id="SubmitBtn" onclick="return confirm('你確定要刪除?')" />
@@ -130,7 +186,7 @@
 
 @section scripts {
     <script>
-    
+
 
     </script>
 

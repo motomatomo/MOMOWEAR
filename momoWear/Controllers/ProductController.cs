@@ -21,15 +21,61 @@ namespace momoWear.Controllers
         /// List 所有列表
         /// </summary>
         /// <returns></returns>
-        public ActionResult List()
+        public ActionResult List(string keyword)
         {
-            var list = from p in db.tclothes
-                       select p;
-            //var list = db.tclothes.ToList();
+            
+            var tempData = db.tcategory.ToList();
+            if (tempData != null)
+            {
+                TempData["fcategoryNameResult"] = tempData;
 
+            }
             getName();
+            IEnumerable<tclothes> list=null;
+            
+            keyword = Request.Form["txtKeyword"];
+            //下拉選單關鍵字
+            string str = Request.Form["mpick"];
+            string fcategoryName = Request.Form["fcategoryName"];
+            switch (str)
+            {
+                case "商品名稱":
+                    list = db.tclothes.Where
+                           (p => p.fname.Contains(keyword) || p.fdescribe.Contains(keyword)).ToList();
+                    return View(list);
 
-            return View(list);
+
+                case "商品類別":
+                    list = db.tclothes.Where(p => p.tcategory.fcategoryName.Contains(fcategoryName));
+                    return View(list);
+
+
+                case "顏色":
+                    list = db.tclothes.Where(p => p.fcolor.Contains(keyword));
+                    return View(list);
+
+
+                case "庫存不足商品":
+                    list = db.tclothes.Where(p => p.fquentity >= 0 && p.fquentity < 5);
+                    return View(list);
+
+                case "選擇搜關鍵字分類":
+                    list = from p
+                           in db.tclothes
+                           orderby p.fquentity descending
+                           select p;
+                    return View(list);
+
+
+                default:
+                    list = from p
+                           in db.tclothes
+                           orderby p.fquentity descending
+                           select p;
+                    return View(list);
+
+            }
+            
         }
 
         private void getName()
