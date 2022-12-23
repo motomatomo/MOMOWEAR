@@ -4,14 +4,18 @@
     ViewBag.Title = ViewBag.userName + "你好";
 }
 
-@using (Html.BeginForm("Create", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    @Html.AntiForgeryToken()
-    @ViewBag.err
 
-    <div class="form-horizontal">
-        <h4>新增商品</h4>
-        <hr />
+
+    @using (Html.BeginForm("Create", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        @ViewBag.err
+
+<div class="form-horizontal">
+    <h4>新增商品</h4>
+    <hr />
+    <fieldset class=" col-md-6  ">
+        <legend class="">新增商品</legend>
         @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
         @*@Html.HiddenFor(model => model.fid)*@
@@ -186,70 +190,71 @@
 
             </div>*@
 
+    </fieldset>
+
+    <fieldset class=" col-md-6  ">
+        <legend class="">照片上傳</legend>
+
+        <div class="col-md-6">
+            <label for="fileid" class="form-label">選擇產品照片</label>
+            <input type="file" class="form-control btn-outline-secondary" name="photo" id="fileid" accept="image/*">
+            <hr/>
+            <img src="" class="img-thumbnail" id="img1" />
+        </div>
+    </fieldset>
 
 
-        <fieldset class=" float-lg-end col-md-6  ">
-            <legend class="family">照片上傳</legend>
-
-            <div class="col-md-6">
-                <label for="inputFile" class="form-label">選擇產品照片</label>
-                <input type="file" class="form-control btn-outline-secondary" name="photo" id="fileid" accept="image/*">
-                <img src="" class="w-75 m-3 " id="img1" />
-            </div>
-        </fieldset>
-
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
+    <div class="form-group ">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-default" />
         </div>
     </div>
-}
-
-<div>
-    @Html.ActionLink("Back to List", "List")
 </div>
+    }
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+    <div>
+        @Html.ActionLink("Back to List", "List")
+    </div>
 
-    <script>
-        //把下拉選單idfcategoryName的value選出來
-        //放在fcategoryID input裡 disabled 不能自行輸入
-        //因為有人拉了下拉選單又跑去put手動輸入 結果送出的資料是以手動輸入的為準
-        //造成下拉選單 跟手動輸入的類別代號在畫面上看起來不同
+    @section scripts {
+        @Scripts.Render("~/bundles/jqueryval")
 
-        let fcategoryName = document.getElementById("fcategoryName");
-        let fcategoryID = document.getElementById("fcategoryID");
-        //var selectValue = fcategoryName.options[0].value;
-        //console.log(selectValue);//1
-        fcategoryName.addEventListener("change", function () {
-            var selectValue = this.options[this.selectedIndex].value;
+        <script>
+            //把下拉選單idfcategoryName的value選出來
+            //放在fcategoryID input裡 disabled 不能自行輸入
+            //因為有人拉了下拉選單又跑去put手動輸入 結果送出的資料是以手動輸入的為準
+            //造成下拉選單 跟手動輸入的類別代號在畫面上看起來不同
 
-            console.log(selectValue);
-            //fcategoryID.setAttribute('value', selectValue);
-            fcategoryID.value = selectValue;
+            let fcategoryName = document.getElementById("fcategoryName");
+            let fcategoryID = document.getElementById("fcategoryID");
+            //var selectValue = fcategoryName.options[0].value;
+            //console.log(selectValue);//1
+            fcategoryName.addEventListener("change", function () {
+                var selectValue = this.options[this.selectedIndex].value;
 
-        });
+                console.log(selectValue);
+                //fcategoryID.setAttribute('value', selectValue);
+                fcategoryID.value = selectValue;
+
+            });
 
 
 
-        //預覽
-        const theFile = document.querySelector('#fileid');
-        const theImg = document.querySelector('#img1')
-        theFile.addEventListener("change", function () {
-            //預覽圖片 FileReader .png、.jpeg..
-            //regular expression
-            const file = theFile.files[0]
-            //todo 判斷檔案是不是圖，可以用regular expression
+            //預覽
+            const theFile = document.querySelector('#fileid');
+            const theImg = document.querySelector('#img1')
+            theFile.addEventListener("change", function () {
+                //預覽圖片 FileReader .png、.jpeg..
+                //regular expression
+                const file = theFile.files[0]
+                //todo 判斷檔案是不是圖，可以用regular expression
 
-            const reader = new FileReader();
-            reader.addEventListener("load", function () {
-                theImg.src = this.result;
+                const reader = new FileReader();
+                reader.addEventListener("load", function () {
+                    theImg.src = this.result;
+                })
+                reader.readAsDataURL(file);
             })
-            reader.readAsDataURL(file);
-        })
 
-    </script>
-}
+        </script>
+    }

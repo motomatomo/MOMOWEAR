@@ -1,14 +1,14 @@
 ﻿@model IEnumerable<momoWear.Models.tclothes>
 @{
-    ViewBag.Title = ViewBag.userName +"你好";
- }
+    ViewBag.Title = ViewBag.userName + "你好";
+}
 
 
 <div class="row">
 
     <a href="/Home/Signout" class="mx-1">登出</a>
 
-    <hr/>
+    <hr />
     <div class="table-responsive">
         <p>
             @Html.ActionLink("新增產品", "Create")
@@ -110,9 +110,14 @@
                     </td>
 
                     <td>
-                        @Html.ActionLink("修改", "Edit", new { id = item.fid }, new { @class="btn btn-default" }) 
+                        @Html.ActionLink("修改", "Edit", new { id = item.fid }, new { @class = "btn btn-default" })
                         @*@Html.ActionLink("Details", "Details", new { id = item.fid }) |*@
-                        @Html.ActionLink("刪除", "Delete", "Product", new { id = item.fid}, new { @class = "btn btn-default", onclick = "return confirm('確定刪除?')" })
+                        @*@Html.ActionLink("刪除", "Delete", "Product", new { id = item.fid}, new { @class = "btn btn-default", onclick = "return confirm('確定刪除?')" })*@
+                        @using (@Html.BeginForm("Delete","Product",FormMethod.Post))
+                        {
+                            @Html.Hidden("id", item.fid)
+                            <input type="submit" value="刪除" class="btn btn-default " id="SubmitBtn" onclick="return confirm('你確定要刪除?')" />
+                        }
                     </td>
                 </tr>
             }
@@ -122,3 +127,11 @@
 
     </div>
 </div>
+
+@section scripts {
+    <script>
+    
+
+    </script>
+
+}

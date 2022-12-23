@@ -161,7 +161,7 @@ namespace momoWear.Controllers
         /// <summary>
         /// 新增類別Post 新增完畢後導向RedirectToAction("Create")
         /// </summary>
-        /// <param name="newCategory"></param>
+        /// <param name="newCategory">tcategory newCategory</param>
         /// <returns></returns>
         [HttpPost]
         public ActionResult CreateGategory(tcategory newCategory)
@@ -258,6 +258,7 @@ namespace momoWear.Controllers
 
         }
 
+        [HttpPost]
         public ActionResult Delete(int? id)
         {
             if (id != null)
