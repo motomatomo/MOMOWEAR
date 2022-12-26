@@ -1,5 +1,9 @@
 ﻿@using momoWear.Models
-@model IEnumerable<momoWear.Models.tclothes>
+@using PagedList
+@using PagedList.Mvc
+@model IPagedList<momoWear.Models.tclothes>
+
+@*@model IEnumerable<momoWear.Models.tclothes>*@
 
 
 @{
@@ -7,7 +11,7 @@
 }
 
 @{
-
+    <link href="~/Content/PagedList.css" rel="stylesheet" />
 
     //下拉選單選項
     List<SelectListItem> list = new List<SelectListItem>();
@@ -27,7 +31,7 @@
         list.Add(new SelectListItem()
         {
             Text = "類別代號" + item.fid + " " + item.fcategoryID + " " + item.fcategoryName,
-            Value =item.fcategoryName,
+            Value = item.fcategoryName,
             Selected = false
         }
         );
@@ -72,46 +76,46 @@
         <table class="table align-middle">
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.fserialNumber)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().fserialNumber)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.tcategory.fcategoryID)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().tcategory.fcategoryID)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.fname)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().fname)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.fcolor)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().fcolor)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.fsize)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().fsize)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.fquentity)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().fquentity)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.fdescribe)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().fdescribe)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.fsalesVolume)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().fsalesVolume)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.fprice)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().fprice)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.fsalesdate)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().fsalesdate)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.fsafetyStockLevel)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().fsafetyStockLevel)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.fmodifiedDate)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().fmodifiedDate)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.fbrand)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().fbrand)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.fphotoPath)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().fphotoPath)
                 </th>
 
                 <th></th>
@@ -179,6 +183,7 @@
             }
 
         </table>
+        @Html.PagedListPager((IPagedList)Model, page => Url.Action("List", new { page, keyword = Request.QueryString["txtKeyword"] }))
 
 
     </div>

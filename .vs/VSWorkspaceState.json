@@ -2,12 +2,11 @@
   "ExpandedNodes": [
     "",
     "\\momoWear",
+    "\\momoWear\\App_Data",
     "\\momoWear\\App_Start",
-    "\\momoWear\\Controllers",
-    "\\momoWear\\Views",
     "\\momoWear\\Views\\Home",
     "\\momoWear\\Views\\Product"
   ],
-  "SelectedNode": "\\momoWear\\Controllers\\HomeController.cs",
+  "SelectedNode": "\\momoWear.sln",
   "PreviewInSolutionExplorer": false
 }

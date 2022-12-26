@@ -90,3 +90,7 @@ D:\pritice\momoWear\momoWear\bin\EntityFramework.SqlServer.xml
 D:\pritice\momoWear\momoWear\bin\zh-Hant\EntityFramework.resources.dll
 D:\pritice\momoWear\momoWear\bin\zh-Hant\EntityFramework.SqlServer.resources.dll
 D:\pritice\momoWear\momoWear\obj\Debug\momoWear.csproj.AssemblyReference.cache
+D:\pritice\momoWear\momoWear\bin\PagedList.dll
+D:\pritice\momoWear\momoWear\bin\PagedList.xml
+D:\pritice\momoWear\momoWear\bin\PagedList.Mvc.dll
+D:\pritice\momoWear\momoWear\bin\PagedList.Mvc.xml

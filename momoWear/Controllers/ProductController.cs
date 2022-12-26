@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using PagedList;
+using PagedList.Mvc;
 
 
 namespace momoWear.Controllers
@@ -21,7 +23,7 @@ namespace momoWear.Controllers
         /// List 所有列表
         /// </summary>
         /// <returns></returns>
-        public ActionResult List(string keyword)
+        public ActionResult List(string keyword,int? page)
         {
             
             var tempData = db.tcategory.ToList();
@@ -31,51 +33,46 @@ namespace momoWear.Controllers
 
             }
             getName();
-            IEnumerable<tclothes> list=null;
-            
+            //IEnumerable<tclothes> list=null;
+            IEnumerable<tclothes> list;
             keyword = Request.Form["txtKeyword"];
             //下拉選單關鍵字
             string str = Request.Form["mpick"];
             string fcategoryName = Request.Form["fcategoryName"];
+            int pageSize = 3;
             switch (str)
             {
                 case "商品名稱":
                     list = db.tclothes.Where
-                           (p => p.fname.Contains(keyword) || p.fdescribe.Contains(keyword)).ToList();
-                    return View(list);
-
+                           (p => p.fname.Contains(keyword) || p.fdescribe.Contains(keyword));
+                    list = list.OrderByDescending(p => p.fquentity);
+                    break;
 
                 case "商品類別":
                     list = db.tclothes.Where(p => p.tcategory.fcategoryName.Contains(fcategoryName));
-                    return View(list);
-
+                    list = list.OrderByDescending(p => p.fquentity);
+                    break;
 
                 case "顏色":
                     list = db.tclothes.Where(p => p.fcolor.Contains(keyword));
-                    return View(list);
-
+                    break;
 
                 case "庫存不足商品":
                     list = db.tclothes.Where(p => p.fquentity >= 0 && p.fquentity < 5);
-                    return View(list);
+                    break;
 
                 case "選擇搜關鍵字分類":
-                    list = from p
-                           in db.tclothes
-                           orderby p.fquentity descending
-                           select p;
-                    return View(list);
-
-
                 default:
                     list = from p
                            in db.tclothes
                            orderby p.fquentity descending
                            select p;
-                    return View(list);
+                    break;
 
             }
-            
+            var listResult = list.ToPagedList(page ?? 1, pageSize);
+            return View(listResult);
+
         }
 
         private void getName()
@@ -187,12 +184,6 @@ namespace momoWear.Controllers
                 return RedirectToAction("List");
             }
 
-
-
-
-
-
-
         }
 
         /// <summary>
@@ -279,7 +270,6 @@ namespace momoWear.Controllers
                     else
                     {
                         //要等於原來SElect的照片  不能等於 NULL editedProduct.fphotoPath
-                       
                         product.fphotoPath = product.fphotoPath;
                     }
 
@@ -314,7 +304,6 @@ namespace momoWear.Controllers
                 {
                     db.tclothes.Remove(prod);
                     db.SaveChanges();
-                    return RedirectToAction("List");
                 }
             }
 
