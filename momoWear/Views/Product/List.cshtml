@@ -183,7 +183,7 @@
             }
 
         </table>
-        @Html.PagedListPager((IPagedList)Model, page => Url.Action("List", new { page, keyword = Request.QueryString["txtKeyword"] }))
+        @Html.PagedListPager(Model, page => Url.Action("List", new { page, keyword = Request.QueryString["txtKeyword"] }))
 
 
     </div>
