@@ -41,17 +41,33 @@
 }
 
 
-@if (TempData["noFound"] != null)
-{
-    <script type="text/javascript">
-        var message = @Html.Raw(Json.Encode(TempData["noFound"]));
-        alert(message);
-    </script>
-}
+<!-- Modal -->
+<div class="modal fade" id="dialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">提示</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                找不到指定的商品。
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 
 <div class="row">
 
     <a href="/Home/Signout" class="mx-1">登出</a>
+
 
     <hr />
     <div class="table-responsive">
@@ -213,8 +229,21 @@
 @section scripts {
     <script>
 
+        $(document).ready(function () {
+            console.log("ready!");
 
-
+        @{
+            if(@TempData["noFound"]!=null)
+            {
+                @*@: let popModal = document.getElementById('#dialog');
+                @:let str = @Html.Raw(@TempData["noFound"]);
+                @:popModal.appendChild(document.createTextNode(str));
+                   @: $('#dialog').show();*@
+                @:$('#dialog').modal('show');
+                
+            }
+        }
+        });
 
 
     </script>

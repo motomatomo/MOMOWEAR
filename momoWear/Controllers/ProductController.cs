@@ -76,8 +76,8 @@ namespace momoWear.Controllers
                     //所以要用Count判斷到底有沒有找到 如果為0就是沒找到
                     if (count == 0)
                     {
-
                         TempData["noFound"] = "未搜尋到任何產品";
+                        //TempData["noFound"] = "未搜尋到任何產品";
 
                     }
 
@@ -124,8 +124,8 @@ namespace momoWear.Controllers
             //所以要用Count判斷到底有沒有找到 如果為0就是沒找到
             if (count==0)
             {
-                
-                TempData["noFound"] = "未搜尋到任何產品";
+                TempData["noFound"] = "$('#dialog').modal('show');";
+                //TempData["noFound"] = "未搜尋到任何產品";
                
             }
             return View(list.ToPagedList(page ?? 1, pageSize));
