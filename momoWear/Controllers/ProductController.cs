@@ -24,67 +24,111 @@ namespace momoWear.Controllers
         /// <returns></returns>
         public ActionResult List(string keyword,int? page)
         {
-            var tempData = db.tcategory.ToList();
-            if (tempData != null)
-            {
-                TempData["fcategoryNameResult"] = tempData;
-            }
-            getName();
-
             IEnumerable<tclothes> list = null;
             //IEnumerable<tclothes> list;
+            //input
             keyword = Request.Form["txtKeyword"];
             //下拉選單關鍵字
             string str = Request.Form["mpick"];
             //分類名稱
             string fcategoryName = Request.Form["fcategoryName"];
             int pageSize = 10;
-            if (!string.IsNullOrEmpty(keyword))
+            int count=0;
+
+            try
             {
-                switch (str)
+                var tempData = db.tcategory.ToList();
+                if (tempData != null)
                 {
-                    case "商品名稱":
-                        list = db.tclothes.Where
-                               (p => p.fname.Contains(keyword) || p.fdescribe.Contains(keyword));
-                        list = list.OrderByDescending(p => p.fquentity);
-                        break;
+                    TempData["fcategoryNameResult"] = tempData;
+                }
+                getName();
 
-                    case "商品類別":
-                        list = db.tclothes.Where(p => p.tcategory.fcategoryName.Contains(fcategoryName));
-                        list = list.OrderByDescending(p => p.fquentity);
-                        break;
+           
+                if (!string.IsNullOrEmpty(keyword))
+                {
+                    switch (str)
+                    {
+                        case "商品名稱":
+                            list = db.tclothes.Where
+                                   (p => p.fname.Contains(keyword) || p.fdescribe.Contains(keyword));
+                            list = list.OrderByDescending(p => p.fquentity);
+                            count = list.Count();
+                            break;
 
-                    case "顏色":
-                        list = db.tclothes.Where(p => p.fcolor.Contains(keyword));
-                        break;
+                        case "顏色":
+                            list = db.tclothes.Where(p => p.fcolor.Contains(keyword)).OrderByDescending(p=>p.fquentity);
+                            count = list.Count();
+                            break;
 
-                    case "庫存不足商品":
-                        list = db.tclothes.Where(p => p.fquentity >= 0 && p.fquentity < 5);
-                        break;
+                       
 
-                    case "選擇搜關鍵字分類":
-                    default:
-                        list = null;
-                        break;
+                        case "選擇搜關鍵字分類":
+                        default:
+                            list = null;
+                            break;
+
+                       
+                            
+
+                    }
+                    //雖然list就算沒找到東西 也不會進到NULL的因為他不是NULL是Empty
+                    //所以要用Count判斷到底有沒有找到 如果為0就是沒找到
+                    if (count == 0)
+                    {
+
+                        TempData["noFound"] = "未搜尋到任何產品";
+
+                    }
+
+                    return View(list.ToPagedList(page ?? 1, pageSize));
 
                 }
 
+
+                //如果搜尋input沒輸入
+                else
+                {
+                    switch (str) {
+
+                        case "庫存不足商品":
+                            list = db.tclothes.Where(p => p.fquentity >= 0 && p.fquentity < 5).OrderByDescending(p => p.fquentity);
+                            break;
+
+                        case "商品類別":
+                            list = db.tclothes.Where(p => p.tcategory.fcategoryName.Contains(fcategoryName));
+                            list = list.OrderByDescending(p => p.fquentity);
+                            break;
+
+                        case "選擇搜關鍵字分類":
+                        default:
+                            list = from p
+                           in db.tclothes
+                                   orderby p.fquentity descending
+                                   select p;
+                            break;
+                    }           
+                }
+
+                //if (list == null)
+                //    return View("Error", new { message = "發生未知錯誤" });
+
             }
-            else
+            catch (Exception e)
             {
-                list = from p
-                              in db.tclothes
-                       orderby p.fquentity descending
-                       select p;
+                TempData["err"]= e.Message;
             }
 
-            if (list == null)
-                return Content("查無內容");
-
+            count=list.Count();
+            //雖然list就算沒找到東西 也不會進到NULL的因為他不是NULL是Empty
+            //所以要用Count判斷到底有沒有找到 如果為0就是沒找到
+            if (count==0)
+            {
+                
+                TempData["noFound"] = "未搜尋到任何產品";
+               
+            }
             return View(list.ToPagedList(page ?? 1, pageSize));
-
-
-
         }
 
         private void getName()
@@ -321,10 +365,19 @@ namespace momoWear.Controllers
 
             return RedirectToAction("List");
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message">錯誤訊息</param>
+        
+        public ActionResult Error(string message)
+        {
+            ViewBag.ErrorMessage = message;
+            return View();
+        }
 
 
 
     }
-    
+
 }
