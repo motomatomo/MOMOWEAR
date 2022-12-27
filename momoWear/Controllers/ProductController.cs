@@ -17,7 +17,6 @@ namespace momoWear.Controllers
         // GET: Product
         MOMOWearEntities db = new MOMOWearEntities();
 
-
          
         /// <summary>
         /// List 所有列表
@@ -25,53 +24,66 @@ namespace momoWear.Controllers
         /// <returns></returns>
         public ActionResult List(string keyword,int? page)
         {
-            
             var tempData = db.tcategory.ToList();
             if (tempData != null)
             {
                 TempData["fcategoryNameResult"] = tempData;
-
             }
             getName();
-            //IEnumerable<tclothes> list=null;
-            IEnumerable<tclothes> list;
+
+            IEnumerable<tclothes> list = null;
+            //IEnumerable<tclothes> list;
             keyword = Request.Form["txtKeyword"];
             //下拉選單關鍵字
             string str = Request.Form["mpick"];
+            //分類名稱
             string fcategoryName = Request.Form["fcategoryName"];
-            int pageSize = 3;
-            switch (str)
+            int pageSize = 10;
+            if (!string.IsNullOrEmpty(keyword))
             {
-                case "商品名稱":
-                    list = db.tclothes.Where
-                           (p => p.fname.Contains(keyword) || p.fdescribe.Contains(keyword));
-                    list = list.OrderByDescending(p => p.fquentity);
-                    break;
+                switch (str)
+                {
+                    case "商品名稱":
+                        list = db.tclothes.Where
+                               (p => p.fname.Contains(keyword) || p.fdescribe.Contains(keyword));
+                        list = list.OrderByDescending(p => p.fquentity);
+                        break;
 
-                case "商品類別":
-                    list = db.tclothes.Where(p => p.tcategory.fcategoryName.Contains(fcategoryName));
-                    list = list.OrderByDescending(p => p.fquentity);
-                    break;
+                    case "商品類別":
+                        list = db.tclothes.Where(p => p.tcategory.fcategoryName.Contains(fcategoryName));
+                        list = list.OrderByDescending(p => p.fquentity);
+                        break;
 
-                case "顏色":
-                    list = db.tclothes.Where(p => p.fcolor.Contains(keyword));
-                    break;
+                    case "顏色":
+                        list = db.tclothes.Where(p => p.fcolor.Contains(keyword));
+                        break;
 
-                case "庫存不足商品":
-                    list = db.tclothes.Where(p => p.fquentity >= 0 && p.fquentity < 5);
-                    break;
+                    case "庫存不足商品":
+                        list = db.tclothes.Where(p => p.fquentity >= 0 && p.fquentity < 5);
+                        break;
 
-                case "選擇搜關鍵字分類":
-                default:
-                    list = from p
-                           in db.tclothes
-                           orderby p.fquentity descending
-                           select p;
-                    break;
+                    case "選擇搜關鍵字分類":
+                    default:
+                        list = null;
+                        break;
+
+                }
 
             }
-            var listResult = list.ToPagedList(page ?? 1, pageSize);
-            return View(listResult);
+            else
+            {
+                list = from p
+                              in db.tclothes
+                       orderby p.fquentity descending
+                       select p;
+            }
+
+            if (list == null)
+                return Content("查無內容");
+
+            return View(list.ToPagedList(page ?? 1, pageSize));
+
+
 
         }
 
