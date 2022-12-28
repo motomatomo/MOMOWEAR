@@ -33,7 +33,7 @@ namespace momoWear.Controllers
             //分類名稱
             string fcategoryName = Request.Form["fcategoryName"];
             int pageSize = 10;
-            int count=0;
+            
 
             try
             {
@@ -53,19 +53,22 @@ namespace momoWear.Controllers
                             list = db.tclothes.Where
                                    (p => p.fname.Contains(keyword) || p.fdescribe.Contains(keyword));
                             list = list.OrderByDescending(p => p.fquentity);
-                            count = list.Count();
+                            
                             break;
 
                         case "顏色":
                             list = db.tclothes.Where(p => p.fcolor.Contains(keyword)).OrderByDescending(p=>p.fquentity);
-                            count = list.Count();
+                           
                             break;
 
                        
 
                         case "選擇搜關鍵字分類":
                         default:
-                            list = null;
+                            list = from p
+                                   in db.tclothes
+                                   orderby p.fquentity descending
+                                   select p;
                             break;
 
                        
@@ -74,7 +77,8 @@ namespace momoWear.Controllers
                     }
                     //雖然list就算沒找到東西 也不會進到NULL的因為他不是NULL是Empty
                     //所以要用Count判斷到底有沒有找到 如果為0就是沒找到
-                    if (count == 0)
+                    
+                    if (!list.Any())
                     {
                         TempData["noFound"] = "未搜尋到任何產品";
                         //TempData["noFound"] = "未搜尋到任何產品";
@@ -103,7 +107,7 @@ namespace momoWear.Controllers
                         case "選擇搜關鍵字分類":
                         default:
                             list = from p
-                           in db.tclothes
+                                   in db.tclothes
                                    orderby p.fquentity descending
                                    select p;
                             break;
@@ -119,14 +123,14 @@ namespace momoWear.Controllers
                 TempData["err"]= e.Message;
             }
 
-            count=list.Count();
-            //雖然list就算沒找到東西 也不會進到NULL的因為他不是NULL是Empty
-            //所以要用Count判斷到底有沒有找到 如果為0就是沒找到
-            if (count==0)
+           
+            //雖然list就算沒找到東西 也不會進到NULL的因為他不是NULL是Empty 
+            //所以要用Count判斷到底有沒有找到 如果為0就是沒找到 Count效能比較差 改用Any
+            if (!list.Any())
             {
-                TempData["noFound"] = "$('#dialog').modal('show');";
-                //TempData["noFound"] = "未搜尋到任何產品";
-               
+                //TempData["noFound"] = "$('#dialog').modal('show');";
+                TempData["noFound"] = "未搜尋到任何產品";
+
             }
             return View(list.ToPagedList(page ?? 1, pageSize));
         }
