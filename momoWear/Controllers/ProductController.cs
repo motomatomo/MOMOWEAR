@@ -23,7 +23,7 @@ namespace momoWear.Controllers
 
             getCategoryName();
             getName();
-            IEnumerable<tclothes> list = db.tclothes.OrderByDescending(m=>m.fquentity);
+            IEnumerable<tclothes> list = db.tclothes.OrderByDescending(m=>m.fsalesVolume);
             int pageSize = 10;
 
             int currentPage = page < 1 ? 1 : page;
@@ -233,7 +233,7 @@ namespace momoWear.Controllers
             //依有沒有上傳照片分類
             if (c.photo != null)
             {
-
+                //檔案驗證
                 var fileValid = true;
                 // Limit File Szie Below : 10MB
                 if (c.photo.ContentLength <= 0 || c.photo.ContentLength > 10475760)
@@ -247,6 +247,21 @@ namespace momoWear.Controllers
                     string name = Path.GetFileName(c.photo.FileName);
 
                     string photoPath = Path.Combine(Server.MapPath("~/images"), name);
+                    string tempfileName = "";
+                    //偵測是否有同樣檔名的檔案
+                    if (System.IO.File.Exists(photoPath)) {
+                        int myCounter = 2;
+                        
+                        //如果有就把相同檔名的檔案改掉,因為可能不只一個檔名相同,所以用while相同都要改,然後數字會遞增去改
+                        while (System.IO.File.Exists(photoPath))
+                        {
+                            tempfileName = myCounter.ToString() + "-" + name;
+                            photoPath = Path.Combine(Server.MapPath("~/images"),tempfileName);
+                            myCounter += 1;
+                        }
+                        //把修改好的檔名丟給name
+                        name = tempfileName;
+                    }
                     c.photo.SaveAs(photoPath);
                     c.fphotoPath = name;
                     db.tclothes.Add(c);
@@ -338,15 +353,35 @@ namespace momoWear.Controllers
                         }
                         if (fileValid == true)
                         {
-                            string photoName = Path.GetFileName(editedProduct.photo.FileName);
-                            string photoSavePath = Path.Combine(Server.MapPath("~/images"), photoName);
+                            string name = Path.GetFileName(editedProduct.photo.FileName);
+                            string photoPath = Path.Combine(Server.MapPath("~/images"), name);
+
+                            string tempfileName = "";
+                            //偵測是否有同樣檔名的檔案
+                            if (System.IO.File.Exists(photoPath))
+                            {
+                                int myCounter = 2;
+
+                                //如果有就把相同檔名的檔案改掉,因為可能不只一個檔名相同,所以用while相同都要改,然後數字會遞增去改
+                                while (System.IO.File.Exists(photoPath))
+                                {
+                                    tempfileName = myCounter.ToString() + "-" + name;
+                                    photoPath = Path.Combine(Server.MapPath("~/images"), tempfileName);
+                                    myCounter += 1;
+                                }
+                                //把修改好的檔名丟給name
+                                name = tempfileName;
+                            }
+
+
+
                             //存照片
-                            editedProduct.photo.SaveAs(photoSavePath);
+                            editedProduct.photo.SaveAs(photoPath);
                             //選出來的產品的圖片路徑改成新的圖檔的檔名
-                            product.fphotoPath = photoName;
+                            product.fphotoPath = name;
                         }  
                     }
-                    
+                    //沒更新照片的話使用原照片
                     else
                     {
                         //要等於原來SElect的照片  不能等於 NULL editedProduct.fphotoPath
