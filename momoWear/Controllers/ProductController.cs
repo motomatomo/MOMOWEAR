@@ -34,7 +34,7 @@ namespace momoWear.Controllers
         /// List 所有列表
         /// </summary>
         /// <returns></returns>
-        public ActionResult List(string keyword,int? page)
+        public ActionResult List(string keyword,int page=1)
         {
 
             IEnumerable<tclothes> list = null;
@@ -46,7 +46,7 @@ namespace momoWear.Controllers
             //分類名稱
             string fcategoryName = Request.Form["fcategoryName"];
             int pageSize = 10;
-            
+            int currentPage;
 
             try
             {
@@ -74,11 +74,9 @@ namespace momoWear.Controllers
 
                         case "選擇搜關鍵字分類":
                         default:
-                            list = from p
-                                   in db.tclothes
-                                   orderby p.fquentity descending
-                                   select p;
-                            break;
+                            //list = db.tclothes.OrderByDescending(m => m.fsalesVolume);
+                            TempData["reSearh"] = "請下拉選擇搜尋方式";
+                            throw new Exception();
 
 
 
@@ -93,8 +91,9 @@ namespace momoWear.Controllers
                         //TempData["noFound"] = "未搜尋到任何產品";
 
                     }
-
-                    return View(list.ToPagedList(page ?? 1, pageSize));
+                    currentPage = (int)page < 1 ? 1 : (int)page;
+                    //return View(list.ToPagedList(page ?? 1, pageSize));
+                    return View(list.ToPagedList(currentPage, pageSize));
 
                 }
 
@@ -111,16 +110,22 @@ namespace momoWear.Controllers
 
                         case "商品類別":
                             list = db.tclothes.Where(p => p.tcategory.fcategoryName.Contains(fcategoryName));
-                            list = list.OrderByDescending(p => p.fquentity);
+                            list = list.OrderByDescending(p => p.fsalesVolume);
                             break;
+
+                        case "顏色":
+                        case "商品名稱":
+                            TempData["reSearh"] = "請輸入商品名稱或衣服顏色";
+                            
+                            throw new Exception();
 
                         case "選擇搜關鍵字分類":
                         default:
-                            list = from p
-                                   in db.tclothes
-                                   orderby p.fquentity descending
-                                   select p;
-                            break;
+                            //list = db.tclothes.OrderByDescending(m => m.fsalesVolume);
+                            TempData["reSearh"] = "請下拉選擇搜尋方式";
+                            throw new Exception();
+                            
+                           
                     }
                 }
 
@@ -131,6 +136,7 @@ namespace momoWear.Controllers
             catch (Exception e)
             {
                 TempData["err"]= e.Message;
+                return RedirectToAction("List");
             }
 
            
@@ -142,7 +148,10 @@ namespace momoWear.Controllers
                 TempData["noFound"] = "未搜尋到任何產品";
 
             }
-            return View(list.ToPagedList(page ?? 1, pageSize));
+            currentPage = (int)page < 1 ? 1 : (int)page;
+            //return View(list.ToPagedList(page ?? 1, pageSize));
+            return View(list.ToPagedList(currentPage, pageSize));
+            
         }
 
         private void getCategoryName()
@@ -358,7 +367,7 @@ namespace momoWear.Controllers
 
                             string tempfileName = "";
                             //偵測是否有同樣檔名的檔案
-                            if (System.IO.File.Exists(photoPath))
+                            
                             {
                                 int myCounter = 2;
 
