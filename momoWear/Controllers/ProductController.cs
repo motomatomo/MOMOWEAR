@@ -17,13 +17,26 @@ namespace momoWear.Controllers
         // GET: Product
         MOMOWearEntities db = new MOMOWearEntities();
 
-         
+        [HttpGet]
+        public ActionResult List(int page = 1) 
+        {
+
+            getCategoryName();
+            getName();
+            IEnumerable<tclothes> list = db.tclothes.OrderByDescending(m=>m.fquentity);
+            int pageSize = 10;
+
+            int currentPage = page < 1 ? 1 : page;
+            return View(list.ToPagedList(currentPage, pageSize));
+        }
+
         /// <summary>
         /// List 所有列表
         /// </summary>
         /// <returns></returns>
         public ActionResult List(string keyword,int? page)
         {
+
             IEnumerable<tclothes> list = null;
             //IEnumerable<tclothes> list;
             //input
@@ -37,14 +50,10 @@ namespace momoWear.Controllers
 
             try
             {
-                var tempData = db.tcategory.ToList();
-                if (tempData != null)
-                {
-                    TempData["fcategoryNameResult"] = tempData;
-                }
+                getCategoryName();
                 getName();
 
-           
+
                 if (!string.IsNullOrEmpty(keyword))
                 {
                     switch (str)
@@ -53,15 +62,15 @@ namespace momoWear.Controllers
                             list = db.tclothes.Where
                                    (p => p.fname.Contains(keyword) || p.fdescribe.Contains(keyword));
                             list = list.OrderByDescending(p => p.fquentity);
-                            
+
                             break;
 
                         case "顏色":
-                            list = db.tclothes.Where(p => p.fcolor.Contains(keyword)).OrderByDescending(p=>p.fquentity);
-                           
+                            list = db.tclothes.Where(p => p.fcolor.Contains(keyword)).OrderByDescending(p => p.fquentity);
+
                             break;
 
-                       
+
 
                         case "選擇搜關鍵字分類":
                         default:
@@ -71,13 +80,13 @@ namespace momoWear.Controllers
                                    select p;
                             break;
 
-                       
-                            
+
+
 
                     }
                     //雖然list就算沒找到東西 也不會進到NULL的因為他不是NULL是Empty
                     //所以要用Count判斷到底有沒有找到 如果為0就是沒找到
-                    
+
                     if (!list.Any())
                     {
                         TempData["noFound"] = "未搜尋到任何產品";
@@ -93,7 +102,8 @@ namespace momoWear.Controllers
                 //如果搜尋input沒輸入
                 else
                 {
-                    switch (str) {
+                    switch (str)
+                    {
 
                         case "庫存不足商品":
                             list = db.tclothes.Where(p => p.fquentity >= 0 && p.fquentity < 5).OrderByDescending(p => p.fquentity);
@@ -111,7 +121,7 @@ namespace momoWear.Controllers
                                    orderby p.fquentity descending
                                    select p;
                             break;
-                    }           
+                    }
                 }
 
                 //if (list == null)
@@ -133,6 +143,15 @@ namespace momoWear.Controllers
 
             }
             return View(list.ToPagedList(page ?? 1, pageSize));
+        }
+
+        private void getCategoryName()
+        {
+            var tempData = db.tcategory.ToList();
+            if (tempData != null)
+            {
+                TempData["fcategoryNameResult"] = tempData;
+            }
         }
 
         private void getName()
@@ -224,7 +243,8 @@ namespace momoWear.Controllers
                 }
                 if (fileValid == true)
                 {
-                    string name = Guid.NewGuid().ToString() + ".jpg";
+                    //string name = Guid.NewGuid().ToString() + ".jpg";
+                    string name = Path.GetFileName(c.photo.FileName);
 
                     string photoPath = Path.Combine(Server.MapPath("~/images"), name);
                     c.photo.SaveAs(photoPath);
@@ -318,7 +338,7 @@ namespace momoWear.Controllers
                         }
                         if (fileValid == true)
                         {
-                            string photoName = Guid.NewGuid().ToString()+".jpg";
+                            string photoName = Path.GetFileName(editedProduct.photo.FileName);
                             string photoSavePath = Path.Combine(Server.MapPath("~/images"), photoName);
                             //存照片
                             editedProduct.photo.SaveAs(photoSavePath);

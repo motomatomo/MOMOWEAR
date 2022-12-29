@@ -83,7 +83,7 @@
             <div class="col-md-9">
                 @*@Html.EditorFor(model => model.fcategoryID, new { htmlAttributes = new { @class = "form-control" } })*@
                 @*讓fcategoryID他的最大數字在跟資料庫的fid數量一樣*@
-                @Html.EditorFor(model => model.fcategoryID, new { htmlAttributes = new { @class = "form-control", min = "1", max = list.Count, @readonly = "readonly" } })
+                @Html.EditorFor(model => model.fcategoryID, new { htmlAttributes = new { @class = "form-control", min = "1", max = list.Count, @readonly = "readonly" ,required= "required" } })
 
                 @Html.DropDownList("fcategoryName", list, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.fcategoryID, "", new { @class = "text-danger" })
@@ -96,7 +96,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.fname, htmlAttributes: new { @class = "control-label col-md-3" })
             <div class="col-md-9">
-                @Html.EditorFor(model => model.fname, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.fname, new { htmlAttributes = new { @class = "form-control", required = "required" } })
                 @Html.ValidationMessageFor(model => model.fname, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -152,7 +152,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.fsalesdate, htmlAttributes: new { @class = "control-label col-md-3" })
             <div class="col-md-9">
-                @Html.EditorFor(model => model.fsalesdate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.fsalesdate, new { htmlAttributes = new { @class = "form-control", @type = "date" } })
                 @Html.ValidationMessageFor(model => model.fsalesdate, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -168,7 +168,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.fmodifiedDate, htmlAttributes: new { @class = "control-label col-md-3" })
             <div class="col-md-9">
-                @Html.EditorFor(model => model.fmodifiedDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.fmodifiedDate, new { htmlAttributes = new { @class = "form-control", @type = "date" } })
                 @Html.ValidationMessageFor(model => model.fmodifiedDate, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -204,16 +204,17 @@
     </fieldset>
 
 
-    <div class="form-group ">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-default" />
+    <div class="form-group">
+        <div class="col-12 col-md-10">
+            <input type="submit" value="存檔" class="btn btn-dark" />
         </div>
     </div>
 </div>
     }
-
+    <br />
+    <br />
     <div>
-        @Html.ActionLink("回列表", "List")
+        @Html.ActionLink("回列表", "List",null,new {@class="btn btn-light" })
     </div>
 
     @section scripts {
