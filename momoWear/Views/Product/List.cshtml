@@ -52,7 +52,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                
+
 
                 @if (TempData["noFound"] != null)
                 {
@@ -73,12 +73,9 @@
 
 
 
-
 <div class="row">
 
     <a href="/Home/Signout" class="mx-1">登出</a>
-
-
     <hr />
     <div class="table-responsive">
         <p>
@@ -98,27 +95,29 @@
                 </select>
 
 
-                @Html.DropDownList("fcategoryName", list, htmlAttributes: new { @class = "form-control",
-               @style = "display:none"})
+                @Html.DropDownList("fcategoryName", list, htmlAttributes: new
+                {
+                    @class = "form-control",
+               @style = "display:none"
+                })
 
 
-               <div class="col-12 col-lg-2 my-auto ">
+                <div class="col-12 col-lg-2 my-auto ">
                     <input type="text" name="txtKeyword" class="form-control" value="" id="txt" placeholder="請輸入關鍵字" />
                 </div>
 
                 <div class="col-4 col-lg-1 m">
                     <input type="submit" value="查詢" id="keyWorld" class="form-control" />
                 </div>
+                
             }
         </div>
         <br /><br />
 
         @if (TempData["err"] != null)
-                    {
+        {
             <div class="alert alert-danger"> @TempData["err"] </div>
         }
-
-
 
 
         <table class="table align-middle">
@@ -214,7 +213,6 @@
                     <td>
                         @*@Html.DisplayFor(modelItem => item.fphotoPath)*@
                         <img src="~/images/@item.fphotoPath" class="img-thumbnail" alt="產品圖" />
-
                     </td>
 
                     <td>
@@ -242,31 +240,24 @@
 
         $(document).ready(function () {
             console.log("ready!");
-
         @{
             if((TempData["noFound"]!=null) || (TempData["reSearh"] != null))
             {
-                @*@: let popModal = document.getElementById('#dialog');
-                @:let str = @Html.Raw(@TempData["noFound"]);
-                @:popModal.appendChild(document.createTextNode(str));
-                   @: $('#dialog').show();*@
                 @:$('#dialog').modal('show');
-                
             }
         }
         });
 
-        
         $('#mpick').change(function () {
-
             let pick =$('#mpick').val();
             console.log(pick);
             if (pick == "商品類別") {
                 /*console.log(pick);*/
                 $("#fcategoryName").slideDown(1000);
             } else { $("#fcategoryName").hide(1000); }
-             
         })
+
+
 
     </script>
 

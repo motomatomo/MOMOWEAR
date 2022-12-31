@@ -36,7 +36,6 @@ namespace momoWear.Controllers
         /// <returns></returns>
         public ActionResult List(string keyword,int page=1)
         {
-
             IEnumerable<tclothes> list = null;
             //IEnumerable<tclothes> list;
             //input
@@ -53,7 +52,6 @@ namespace momoWear.Controllers
                 getCategoryName();
                 getName();
 
-
                 if (!string.IsNullOrEmpty(keyword))
                 {
                     switch (str)
@@ -62,7 +60,6 @@ namespace momoWear.Controllers
                             list = db.tclothes.Where
                                    (p => p.fname.Contains(keyword) || p.fdescribe.Contains(keyword));
                             list = list.OrderByDescending(p => p.fquentity);
-
                             break;
 
                         case "顏色":
@@ -70,21 +67,14 @@ namespace momoWear.Controllers
 
                             break;
 
-
-
                         case "選擇搜關鍵字分類":
                         default:
                             //list = db.tclothes.OrderByDescending(m => m.fsalesVolume);
                             TempData["reSearh"] = "請下拉選擇搜尋方式";
                             throw new Exception();
-
-
-
-
                     }
                     //雖然list就算沒找到東西 也不會進到NULL的因為他不是NULL是Empty
                     //所以要用Count判斷到底有沒有找到 如果為0就是沒找到
-
                     if (!list.Any())
                     {
                         TempData["noFound"] = "未搜尋到任何產品";
@@ -94,7 +84,6 @@ namespace momoWear.Controllers
                     currentPage = (int)page < 1 ? 1 : (int)page;
                     //return View(list.ToPagedList(page ?? 1, pageSize));
                     return View(list.ToPagedList(currentPage, pageSize));
-
                 }
 
 
@@ -123,19 +112,14 @@ namespace momoWear.Controllers
                         default:
                             //list = db.tclothes.OrderByDescending(m => m.fsalesVolume);
                             TempData["reSearh"] = "請下拉選擇搜尋方式";
-                            throw new Exception();
-                            
-                           
+                            throw new Exception();                          
                     }
                 }
 
-                //if (list == null)
-                //    return View("Error", new { message = "發生未知錯誤" });
-
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                TempData["err"]= e.Message;
+                //TempData["err"]= e.Message;
                 return RedirectToAction("List");
             }
 

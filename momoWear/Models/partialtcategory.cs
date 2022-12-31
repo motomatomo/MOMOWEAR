@@ -12,6 +12,7 @@ namespace momoWear.Models
     {
         public class tcategoryMetaData
         {
+            [DisplayName("內分類代號")]
             public int fid { get; set; }
             [Required(ErrorMessage = "必填")]
             [DisplayName("類別代號")]
