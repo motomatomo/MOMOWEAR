@@ -249,12 +249,17 @@
                 //regular expression
                 const file = theFile.files[0]
                 //todo 判斷檔案是不是圖，可以用regular expression
-
-                const reader = new FileReader();
-                reader.addEventListener("load", function () {
-                    theImg.src = this.result;
-                })
-                reader.readAsDataURL(file);
+                if (/\.(jpe?g|png|gif)$/i.test(file.name)) {
+                    const reader = new FileReader();
+                    reader.addEventListener("load", function () {
+                        theImg.src = this.result;
+                    })
+                    if (file) {
+                        reader.readAsDataURL(file);
+                    }
+                }
+                
+                
             })
 
         </script>

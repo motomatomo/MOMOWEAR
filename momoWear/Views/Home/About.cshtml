@@ -1,7 +1,145 @@
 ﻿@{
-    ViewBag.Title = "About";
+    ViewBag.Title = "台南公有市集";
+  
 }
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
+<h2>@ViewBag.Title</h2>
+<h3>台南公有市集</h3>
 
-<p>Use this area to provide additional information.</p>
+@*<input type="text" id="searchBox" class="form-control"/>
+    <input type="submit" id="searchForm" value="" />*@
+<button id="buttonGet" class="btn btn-primary">get</button>
+<table class="table table-hover" id='myTable'>
+
+
+    <tr>
+        <th>市集名稱</th>
+        <th>地址</th>
+        <th>攤數</th>
+        <th>電話</th>
+        <th></th>
+    </tr>
+
+    <tbody id='myTbody'>
+    </tbody>
+</table>
+
+@section scripts{
+    <script>
+
+        $(document).ready(function ()
+        {
+            var code, name;
+            let codeList = [];
+            let nameList = [];
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    // 處理資料
+                    var xml = this.responseXML;
+                    var items = xml.getElementsByTagName("townItem");
+                    for (var i = 0; i < items.length; i++) {
+                         code = items[i].getElementsByTagName("towncode")[0].textContent;
+                        name = items[i].getElementsByTagName("townname")[0].textContent;
+                        codeList.push(code);
+                        nameList.push(name);
+                      
+                    }
+                }
+               
+            };
+            xhr.open("GET", "https://api.nlsc.gov.tw/other/ListTown1/67000", true);
+            xhr.send();
+         
+            $.ajax({
+                type: "GET",
+                url: "https://soa.tainan.gov.tw/Api/Service/Get/446b843e-0d70-43ec-b876-b15df91e1355",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    $('#myTbody').empty;
+                    let data = response.data;
+                    console.log(data.length);
+                    //59
+                    //寫法一
+
+                    //const docFrag = $(document.createDocumentFragment());
+                    //$.each(data, function (index, item) {
+                    //    const { 市集名稱, Village, StreetDoorPlate, 規劃攤鋪位數, 連絡電話 } = item;
+                    //    //console.log(市集名稱);
+                    //    //console.log(Village);
+                    //    //console.log(StreetDoorPlate);
+                    //    //console.log(規劃攤鋪位數);
+                    //    //console.log(連絡電話);
+                    //    const add = `台南市${Village}${StreetDoorPlate}`
+                    //    //console.log(add);
+                    //    const cell1 = $('<td></td>').text(市集名稱);
+                    //    const cell2 = $('<td></td>').text(add);
+                    //    const cell3 = $('<td></td>').text(規劃攤鋪位數);
+                    //    const cell4 = $('<td></td>').text(連絡電話);
+                    //    const cell5 = $('<td></td>').html("<a href='https://www.google.com/maps/place/" + add +
+                    //        "' class='btn btn-outline-dark' target='_blank'>路線規劃</a>");
+
+                    //    const row = $('<tr></tr>').append([cell1, cell2, cell3, cell4, cell5]);
+                    //    docFrag.append(row);
+                    //})
+                    //console.log(docFrag);
+                    //$("#myTable>tbody").append(docFrag);
+
+
+                    //寫法2
+                    //for (var i = 0; i < data.length; i++) {
+                    //    const add = `台南市${data[i].Village}${data[i].StreetDoorPlate}`
+
+                    //    var cell1 = $("<td>").text(data[i].市集名稱);
+                    //    var cell2 = $("<td>").text(add);
+                    //    var cell3 = $("<td>").text(data[i].規劃攤鋪位數);
+                    //    var cell4 = $("<td>").text(data[i].連絡電話);
+                    //    var cell5 = $("<td>").html("<a href='https://www.google.com/maps/place/台南市" + add + "' class='btn btn-outline-dark' target='_blank'>路線規劃</a>");
+                    //    var newRow = $("<tr>");
+                    //    newRow.append(cell1, cell2, cell3, cell4, cell5);
+
+
+                    //    //$("<tr>")="<td>" + data[i].市集名稱 + "</td><td>" + add +
+                    //    //    "</td><td>" + data[i].規劃攤鋪位數 + "</td><td>" + data[i].連絡電話 + "</td><td>" +
+                    //    //    "<a href='https://www.google.com/maps/place/" + add + "' class='btn btn-outline-dark' target='_blank'>路線規劃</a></td>"
+                    //    docFrag.append(newRow);
+                    //}
+
+                    //console.log(docFrag);
+                    //$("tbody").append(docFrag);
+
+                    //寫法3
+                   
+                    $.each(data, function (i, item) {
+                        let add = '';
+                        //const areaCode = item.AreaCode;
+                        if (codeList.indexOf(item.AreaCode) != -1) {
+                            let index = codeList.indexOf(item.AreaCode);
+                            //console.log(index);
+                            //console.log(nameList[index]);
+                            let areaName = nameList[index];
+                            add= `台南市${areaName}${item.Village}${item.StreetDoorPlate}`
+                        }
+                        $("#myTbody").append(
+                            "<tr><td>" + `${i + 1}` + "-" + item.市集名稱 + "</td><td>" + add +
+                            "</td><td>" + item.規劃攤鋪位數 + "</td><td>" + item.連絡電話 + "</td><td>" +
+                            "<a href='https://www.google.com/maps/place/" + add + "' class='btn btn-outline-dark' target='_blank'>路線規劃</a></td></tr>"
+                        );
+
+
+                    });
+
+                }
+            })
+
+        });
+
+
+      
+       
+
+        
+
+
+    </script>
+}

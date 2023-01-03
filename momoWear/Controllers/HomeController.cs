@@ -9,11 +9,13 @@ namespace momoWear.Controllers
 {
     public class HomeController : Controller
     {
+        [AllowAnonymous]
         public ActionResult Index()
         {
             
             return View();
         }
+        [AllowAnonymous]
         [HttpPost]
         public ActionResult Index(string loginAccount,string loginPassword)
         {
@@ -37,7 +39,7 @@ namespace momoWear.Controllers
             }
             else {
                 // 登入using System.Web.Security; 表單驗證服務 授權指定的帳號
-                FormsAuthentication.RedirectFromLoginPage(loginAccount, false);
+                FormsAuthentication.RedirectFromLoginPage(loginAccount, true);
                 return RedirectToAction("List", "Product");
             }
 
@@ -60,17 +62,17 @@ namespace momoWear.Controllers
 
 
 
-
+        [AllowAnonymous]
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+         
 
             return View();
         }
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
+           
 
             return View();
         }
