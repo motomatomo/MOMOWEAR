@@ -431,7 +431,7 @@ namespace momoWear.Controllers
         public ActionResult queryBYCategory()
         {
             //getCategoryNameByID(id);
-
+            getName();
             var c = db.tcategory.ToList();
             var query = (from o in db.tcategory
                          join p in db.tclothes
