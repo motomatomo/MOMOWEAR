@@ -7,7 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using PagedList;
 using PagedList.Mvc;
-
+using System.Web.Security;
 
 namespace momoWear.Controllers
 {   
@@ -155,7 +155,15 @@ namespace momoWear.Controllers
                 ViewBag.userName = User.Identity.Name;
             }
         }
-
+        
+        private void getCategoryNameByID(int id=1)
+        {
+            var tempData = db.tcategory.Where(m=>m.fid==id).FirstOrDefault().fcategoryName;
+            if (tempData != null)
+            {
+                TempData["Defaultfcategory"] = tempData;
+            }
+        }
 
         /// <summary>
         /// 新增產品 GET
@@ -164,19 +172,7 @@ namespace momoWear.Controllers
 
         public ActionResult Create()
         {
-            //我想要把兩個欄位都放在TEXT裡失敗 改天再試
-            //var bag = db.tcategory;
-            //int categorycount = bag.Count();
-            //var category = db.tcategory.FirstOrDefault(c => c.fid <= categorycount);
-
-            //string fcategoryID = category.fcategoryID;
-            //string fcategoryName = category.fcategoryName;
-
-            //if (bag!= null)
-            //{
-            //    //下拉是選單 精簡 1.db.t表單,2.value 3.text
-            //    //ViewBag.fcategoryName = new SelectList(db.tcategory, "fcategoryName", $"{fcategoryID} {fcategoryName}");
-            //}
+           
             var tempData = db.tcategory.ToList();
             if (tempData != null)
             {
@@ -427,8 +423,35 @@ namespace momoWear.Controllers
             ViewBag.ErrorMessage = message;
             return View();
         }
+        /// <summary>
+        /// 列出所有依類別排序品項
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult queryBYCategory()
+        {
+            //getCategoryNameByID(id);
 
-
+            var c = db.tcategory.ToList();
+            var query = (from o in db.tcategory
+                         join p in db.tclothes
+                         on o.fid equals p.fcategoryID
+                         orderby p.fcategoryID ascending
+                         select new CqueryBYCategoryVM
+                         {
+                             
+                             fid = p.fid,
+                             fcategoryID = o.fid,
+                             fcategoryName = o.fcategoryName,
+                             fname = p.fname,
+                             fquentity = p.fquentity,
+                             fsalesVolume = p.fsalesVolume,
+                             fdescribe = p.fdescribe,
+                             fphotoPath=p.fphotoPath
+                         }).ToList();
+            
+            return View(query);
+        }
 
     }
 

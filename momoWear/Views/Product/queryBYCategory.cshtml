@@ -1,0 +1,39 @@
+﻿@using momoWear.Models
+@model  List<momoWear.Models.CqueryBYCategoryVM>
+
+@{ViewBag.Title = "依類別查詢"; }
+
+
+<h3 class="my-5">依類別 列出全部品項</h3>
+
+<div class="row">
+
+
+
+
+
+    @{
+        foreach (var item in Model)
+        {
+            var name = $"{@item.fcategoryID}- 類別名稱:{item.fcategoryName}";
+            <div class="col-md-4 d-flex align-items-stretch">
+                <div class="card mb-3" style="width: 18rem;">
+                        <div class="card-header">
+                            <img src="@Url.Content(@"~/images/")@item.fphotoPath" class="card-img-top h-75" alt="...">
+                            <p>@name</p>
+                        </div>
+                    @if (name.Contains(@item.fcategoryName))
+                    {
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">品名 @item.fname</li>
+                            <li class="list-group-item">數量 @item.fquentity 已售 @item.fsalesVolume</li>
+                        </ul>
+
+                    }
+
+                </div>
+
+            </div>
+            }
+        }
+</div>
