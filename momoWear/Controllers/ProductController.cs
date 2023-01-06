@@ -444,6 +444,7 @@ namespace momoWear.Controllers
         public ActionResult queryBYCategory()
         {
             //getCategoryNameByID(id);
+            getCategoryName();
             getName();
             var c = db.tcategory.ToList();
             var query = (from o in db.tcategory

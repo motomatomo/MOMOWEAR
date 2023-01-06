@@ -3,6 +3,18 @@
 
 @{ViewBag.Title = "依類別查詢"; }
 
+@section styles{
+    <style>
+        .rounded-circle {
+            transition: transform 0.3s;
+            /* animate the transform property over 0.3 seconds */
+        }
+
+            .rounded-circle:hover {
+                transform: scale(1.5);
+            }
+    </style>
+}
 
 <h3 class="my-5">依類別 列出全部品項</h3>
 
@@ -12,30 +24,69 @@
 
 
 
-    @{
-        foreach (var item in Model)
+    @{  int i = 1; int j = 0;
+        foreach (var item in TempData["fcategoryNameResult"] as List<tcategory>)
         {
             var name = $"{@item.fcategoryID}- 類別名稱:{item.fcategoryName}";
-            <div class="col-md-4 d-flex align-items-stretch">
-                <div class="card mb-3" style="width: 18rem;">
-                        <div class="card-header">
-                            <img src="@Url.Content(@"~/images/")@item.fphotoPath" class="card-img-top" alt="...">
-                            @name
-                        </div>
+            <div class="col-md-4 ">
+                @*d-flex align-items-stretch*@
+                <div class="card text-bg-dark  mb-3" style="width: 18rem;" data-list="card-list-@i">
+                    <div class="card-header">
+                        @name
+                    </div>
 
+                    <ul class="list-group list-group-flush" style="display:none" id="card-list-@i">
+                        
+                        @foreach (var item2 in Model)
+                        { //若TITLE 類別名包含 加入該類別產品
 
-                    @*@if (name.Contains(@item.fcategoryName))
-                    {*@
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">品名 @item.fname</li>
-                    <li class="list-group-item">數量 @item.fquentity 已售 @item.fsalesVolume</li>
-                </ul>
+                            if (name.Contains(@item2.fcategoryName))
+                            {
+                               
+                                ++j;
+                                <li class="list-group-item"><img src="@Url.Content(@"~/images/")@item2.fphotoPath" class=" rounded-circle" style="width: 4rem;height:4rem;" alt="商品圖"></li>
+                                <li class="list-group-item">@j @item2.fname / 數量 @item2.fquentity / 已售 @item2.fsalesVolume</li>
 
-                    @*}*@
+                            }
 
+                        }
+                    </ul>
                 </div>
 
             </div>
-            }
+            i++;
         }
+    }
 </div>
+
+
+@section scripts {
+    <script>
+
+       
+        let cards = document.querySelectorAll('.card');
+        console.log(cards.length)
+        cards.forEach(function (item,i) {
+            item.addEventListener('click', function () {
+                //取特定CARD
+                let listId = this.getAttribute('data-list');
+                let list = this.querySelector(`#${listId}`);
+                if (list.style.display === "none") {
+                    $(list).slideDown(1000);
+                } else {
+                    $(list).slideUp(1000);
+                }
+               
+            }
+            )
+                    
+        })
+
+        
+           
+           
+
+
+    </script>
+
+}
