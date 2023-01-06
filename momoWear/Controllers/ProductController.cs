@@ -14,7 +14,7 @@ namespace momoWear.Controllers
     [Authorize(Users = "tingyang@gmail.com,motomato914@gmail.com")]
     public class ProductController : Controller
     {
-        // GET: Product
+        // GET: Product 
         MOMOWearEntities db = new MOMOWearEntities();
 
         [HttpGet]
@@ -301,7 +301,11 @@ namespace momoWear.Controllers
             return RedirectToAction("Create");
         }
 
-
+        /// <summary>
+        /// 修改
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public ActionResult Edit(int? id) 
         {
             if (id!=null)
@@ -320,7 +324,11 @@ namespace momoWear.Controllers
             return RedirectToAction("List");
         
         }
-
+        /// <summary>
+        ///  [HttpPost] 修改
+        /// </summary>
+        /// <param name="editedProduct"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Edit(tclothes editedProduct)
         {
@@ -398,6 +406,11 @@ namespace momoWear.Controllers
 
         }
 
+        /// <summary>
+        /// 刪除
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Delete(int? id)
         {

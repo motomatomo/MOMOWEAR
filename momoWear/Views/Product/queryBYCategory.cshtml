@@ -19,17 +19,19 @@
             <div class="col-md-4 d-flex align-items-stretch">
                 <div class="card mb-3" style="width: 18rem;">
                         <div class="card-header">
-                            <img src="@Url.Content(@"~/images/")@item.fphotoPath" class="card-img-top h-75" alt="...">
-                            <p>@name</p>
+                            <img src="@Url.Content(@"~/images/")@item.fphotoPath" class="card-img-top" alt="...">
+                            @name
                         </div>
-                    @if (name.Contains(@item.fcategoryName))
-                    {
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">品名 @item.fname</li>
-                            <li class="list-group-item">數量 @item.fquentity 已售 @item.fsalesVolume</li>
-                        </ul>
 
-                    }
+
+                    @*@if (name.Contains(@item.fcategoryName))
+                    {*@
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">品名 @item.fname</li>
+                    <li class="list-group-item">數量 @item.fquentity 已售 @item.fsalesVolume</li>
+                </ul>
+
+                    @*}*@
 
                 </div>
 
