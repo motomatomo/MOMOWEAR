@@ -16,131 +16,127 @@ namespace momoWear.Controllers
     {
         // GET: Product 
         MOMOWearEntities db = new MOMOWearEntities();
-
-        [HttpGet]
-        public ActionResult List(int page = 1) 
-        {
-
-            getCategoryName();
-            getName();
-            IEnumerable<tclothes> list = db.tclothes.OrderByDescending(m=>m.fsalesVolume);
-            int pageSize = 20;
-
-            int currentPage = page < 1 ? 1 : page;
-            return View(list.ToPagedList(currentPage, pageSize));
-        }
-
         /// <summary>
         /// List 所有列表
         /// </summary>
         /// <returns></returns>
-        public ActionResult  List(string keyword,int page=1)
+        public ActionResult  List(string mpick, string txtKeyword,int page=1)
         {
+            getCategoryName();
+            getName();
             IEnumerable<tclothes> list = null;
-            //IEnumerable<tclothes> list;
-            //input
-            keyword = Request.Form["txtKeyword"];
-            //下拉選單關鍵字
-            string str = Request.Form["mpick"];
-            //分類名稱
-            string fcategoryName = Request.Form["fcategoryName"];
-            
-            int pageSize = 20;
             int currentPage;
+            int pageSize = 20;
+            //一定要設定這兩個值TempData["txtKeyword"] TempData["mpick"]
+            //讓他帶回VIEW才能在下關鍵字時搜尋的到
+            TempData["txtKeyword"] = txtKeyword;
+            TempData["mpick"] = mpick;
+            //GET分類名稱VALUE
+            int fcategoryFid = Convert.ToInt32(Request.Form["fcategoryName"]);
 
-            try
+            //如果input沒有輸入且衣服類別沒有下拉預設0
+            // fcategoryFid有下拉 就會變成資料庫的fid 我設定在select的VALUE裡
+            //透過Request.Form["fcategoryName"]取值 並轉INT32
+
+            if (string.IsNullOrEmpty(txtKeyword) && fcategoryFid==0)
             {
-                getCategoryName();
-                getName();
-
-                if (!string.IsNullOrEmpty(keyword))
+                list = db.tclothes.OrderByDescending(m => m.fsalesVolume);
+                currentPage = page < 1 ? 1 : page;
+                return View(list.ToPagedList(currentPage, pageSize));
+            }
+            else
+            {
+                try
                 {
-                    switch (str)
+
+                    if (!string.IsNullOrEmpty(txtKeyword))
                     {
-                        case "商品名稱":
-                            list = db.tclothes.Where
-                                   (p => p.fname.Contains(keyword) || p.fdescribe.Contains(keyword));
-                            list = list.OrderByDescending(p => p.fsalesVolume);
-                            pageSize = list.Count();
-                            break;
+                        switch (mpick)
+                        {
+                            case "商品名稱":
+                                list = db.tclothes.Where
+                                       (p => p.fname.Contains(txtKeyword) || p.fdescribe.Contains(txtKeyword));
+                                list = list.OrderByDescending(p => p.fsalesVolume);
+                                pageSize = list.Count();
+                                break;
 
-                        case "顏色":
-                            list = db.tclothes.Where(p => p.fcolor.Contains(keyword)).OrderByDescending(p => p.fquentity);
-                            pageSize = list.Count();
-                            break;
+                            case "顏色":
+                                list = db.tclothes.Where(p => p.fcolor.Contains(txtKeyword)).OrderByDescending(p => p.fsalesVolume);
+                                //pageSize = list.Count();
+                                break;
 
-                        case "選擇搜關鍵字分類":
-                        default:
-                            //list = db.tclothes.OrderByDescending(m => m.fsalesVolume);
-                            TempData["reSearh"] = "請下拉選擇搜尋方式";
-                            throw new Exception();
+                            case "選擇搜關鍵字分類":
+                            default:
+                                //list = db.tclothes.OrderByDescending(m => m.fsalesVolume);
+                                TempData["reSearh"] = "請下拉選擇搜尋方式";
+                                throw new Exception();
+                        }
+                        //雖然list就算沒找到東西 也不會進到NULL的因為他不是NULL是Empty
+                        //所以要用Count判斷到底有沒有找到 如果為0就是沒找到
+                        if (!list.Any())
+                        {
+                            TempData["noFound"] = "未搜尋到任何產品";
+                            //TempData["noFound"] = "未搜尋到任何產品";
+                        }
+
+                        //currentPage = page < 1 ? 1 : page;
+                        //return View(list.ToPagedList(currentPage, pageSize));
+                        return View(list.ToPagedList(page, pageSize));
                     }
-                    //雖然list就算沒找到東西 也不會進到NULL的因為他不是NULL是Empty
-                    //所以要用Count判斷到底有沒有找到 如果為0就是沒找到
-                    if (!list.Any())
+
+
+                    //如果搜尋input沒輸入
+                    else
                     {
-                        TempData["noFound"] = "未搜尋到任何產品";
-                        //TempData["noFound"] = "未搜尋到任何產品";
+                        switch (mpick)
+                        {
 
+                            case "庫存不足商品":
+                                list = db.tclothes.Where(p => p.fquentity >= 0 && p.fquentity < 5).OrderByDescending(p => p.fquentity);
+                                pageSize = list.Count();
+                                break;
+
+                            case "商品類別":
+                                list = db.tclothes.Where(p => p.tcategory.fid == fcategoryFid);
+                                list = list.OrderByDescending(p => p.fsalesVolume);
+                                pageSize = list.Count();
+                                break;
+
+                            case "顏色":
+                            case "商品名稱":
+                                TempData["reSearh"] = "請輸入商品名稱或衣服顏色";
+
+                                throw new Exception();
+
+                            case "選擇搜關鍵字分類":
+                            default:
+                                //list = db.tclothes.OrderByDescending(m => m.fsalesVolume);
+                                TempData["reSearh"] = "請下拉選擇搜尋方式";
+                                throw new Exception();
+                        }
+
+                        //雖然list就算沒找到東西 也不會進到NULL的因為他不是NULL是Empty 
+                        //所以要用Count判斷到底有沒有找到 如果為0就是沒找到 Count效能比較差 改用Any
+                        if (!list.Any())
+                        {
+                            //TempData["noFound"] = "$('#dialog').modal('show');";
+                            TempData["noFound"] = "未搜尋到任何產品";
+
+                        }
+                        //currentPage = (int)page < 1 ? 1 : (int)page;
+                        //return View(list.ToPagedList(currentPage, pageSize));
+                        return View(list.ToPagedList(page, pageSize));
                     }
-                    
-                    currentPage = (int)page < 1 ? 1 : (int)page;
-                    //return View(list.ToPagedList(page ?? 1, pageSize));
-                    return View(list.ToPagedList(currentPage, pageSize));
+
                 }
-
-
-                //如果搜尋input沒輸入
-                else
+                catch (Exception)
                 {
-                    switch (str)
-                    {
-
-                        case "庫存不足商品":
-                            list = db.tclothes.Where(p => p.fquentity >= 0 && p.fquentity < 5).OrderByDescending(p => p.fquentity);
-                            pageSize = list.Count();
-                            break;
-
-                        case "商品類別":
-                            list = db.tclothes.Where(p => p.tcategory.fcategoryName.Contains(fcategoryName));
-                            list = list.OrderByDescending(p => p.fsalesVolume);
-                            pageSize = list.Count();
-                            break;
-
-                        case "顏色":
-                        case "商品名稱":
-                            TempData["reSearh"] = "請輸入商品名稱或衣服顏色";
-                            
-                            throw new Exception();
-
-                        case "選擇搜關鍵字分類":
-                        default:
-                            //list = db.tclothes.OrderByDescending(m => m.fsalesVolume);
-                            TempData["reSearh"] = "請下拉選擇搜尋方式";
-                            throw new Exception();                          
-                    }
+                    //TempData["err"]= e.Message;
+                    return RedirectToAction("List");
                 }
-
-            }
-            catch (Exception)
-            {
-                //TempData["err"]= e.Message;
-                return RedirectToAction("List");
+  
             }
 
-           
-            //雖然list就算沒找到東西 也不會進到NULL的因為他不是NULL是Empty 
-            //所以要用Count判斷到底有沒有找到 如果為0就是沒找到 Count效能比較差 改用Any
-            if (!list.Any())
-            {
-                //TempData["noFound"] = "$('#dialog').modal('show');";
-                TempData["noFound"] = "未搜尋到任何產品";
-
-            }
-            currentPage = page < 1 ? 1 : page;
-            //return View(list.ToPagedList(page ?? 1, pageSize));
-            return View(list.ToPagedList(currentPage, pageSize));
-            
         }
 
         private void getCategoryName()
