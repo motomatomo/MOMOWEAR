@@ -57,7 +57,7 @@ namespace momoWear.Controllers
                                 list = db.tclothes.Where
                                        (p => p.fname.Contains(txtKeyword) || p.fdescribe.Contains(txtKeyword));
                                 list = list.OrderByDescending(p => p.fsalesVolume);
-                                pageSize = list.Count();
+                                //pageSize = list.Count();
                                 break;
 
                             case "顏色":
