@@ -63,7 +63,12 @@
             //    }
             //    ); ;
             //}
-
+            list.Add(new SelectListItem()
+            {
+                Text = "請選擇商品類別",
+                Value = null,
+                Selected = false
+            });
             foreach (var item in listTcategory)
             {
                 list.Add(new SelectListItem()
@@ -72,7 +77,7 @@
                     Value = Convert.ToString(item.fid),
                     Selected = false
                 }
-                ); ;
+                ); 
             }
 
 

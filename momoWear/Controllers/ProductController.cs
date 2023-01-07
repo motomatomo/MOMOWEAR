@@ -24,7 +24,7 @@ namespace momoWear.Controllers
             getCategoryName();
             getName();
             IEnumerable<tclothes> list = db.tclothes.OrderByDescending(m=>m.fsalesVolume);
-            int pageSize = 10;
+            int pageSize = 20;
 
             int currentPage = page < 1 ? 1 : page;
             return View(list.ToPagedList(currentPage, pageSize));
@@ -34,7 +34,7 @@ namespace momoWear.Controllers
         /// List 所有列表
         /// </summary>
         /// <returns></returns>
-        public ActionResult List(string keyword,int page=1)
+        public ActionResult  List(string keyword,int page=1)
         {
             IEnumerable<tclothes> list = null;
             //IEnumerable<tclothes> list;
@@ -44,7 +44,8 @@ namespace momoWear.Controllers
             string str = Request.Form["mpick"];
             //分類名稱
             string fcategoryName = Request.Form["fcategoryName"];
-            int pageSize = 10;
+            
+            int pageSize = 20;
             int currentPage;
 
             try
@@ -59,12 +60,13 @@ namespace momoWear.Controllers
                         case "商品名稱":
                             list = db.tclothes.Where
                                    (p => p.fname.Contains(keyword) || p.fdescribe.Contains(keyword));
-                            list = list.OrderByDescending(p => p.fquentity);
+                            list = list.OrderByDescending(p => p.fsalesVolume);
+                            pageSize = list.Count();
                             break;
 
                         case "顏色":
                             list = db.tclothes.Where(p => p.fcolor.Contains(keyword)).OrderByDescending(p => p.fquentity);
-
+                            pageSize = list.Count();
                             break;
 
                         case "選擇搜關鍵字分類":
@@ -81,6 +83,7 @@ namespace momoWear.Controllers
                         //TempData["noFound"] = "未搜尋到任何產品";
 
                     }
+                    
                     currentPage = (int)page < 1 ? 1 : (int)page;
                     //return View(list.ToPagedList(page ?? 1, pageSize));
                     return View(list.ToPagedList(currentPage, pageSize));
@@ -95,11 +98,13 @@ namespace momoWear.Controllers
 
                         case "庫存不足商品":
                             list = db.tclothes.Where(p => p.fquentity >= 0 && p.fquentity < 5).OrderByDescending(p => p.fquentity);
+                            pageSize = list.Count();
                             break;
 
                         case "商品類別":
                             list = db.tclothes.Where(p => p.tcategory.fcategoryName.Contains(fcategoryName));
                             list = list.OrderByDescending(p => p.fsalesVolume);
+                            pageSize = list.Count();
                             break;
 
                         case "顏色":
@@ -132,7 +137,7 @@ namespace momoWear.Controllers
                 TempData["noFound"] = "未搜尋到任何產品";
 
             }
-            currentPage = (int)page < 1 ? 1 : (int)page;
+            currentPage = page < 1 ? 1 : page;
             //return View(list.ToPagedList(page ?? 1, pageSize));
             return View(list.ToPagedList(currentPage, pageSize));
             
@@ -287,14 +292,15 @@ namespace momoWear.Controllers
         [HttpPost]
         public ActionResult CreateGategory(tcategory newCategory)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
+                newCategory.fcategoryName.Trim();
                 var bag = db.tcategory.Add(newCategory);
                 db.SaveChanges();
                 if (bag != null)
                 {
                     // 新增物件到 Viewbag 這樣新增類別後才會帶到Create.cshtml頁面顯示
-                    ViewBag.fcategoryNameResult = bag;
+                    TempData["fcategoryNameResult"] = bag;
                 }
                 getName();
             }
@@ -389,6 +395,7 @@ namespace momoWear.Controllers
                     product.fcategoryID = editedProduct.fcategoryID;
                     product.fname = editedProduct.fname;
                     product.fsize = editedProduct.fsize;
+                    product.fcolor = editedProduct.fcolor;
                     product.fquentity = editedProduct.fquentity;
                     product.fdescribe = editedProduct.fdescribe;
                     product.fsalesVolume = editedProduct.fsalesVolume;

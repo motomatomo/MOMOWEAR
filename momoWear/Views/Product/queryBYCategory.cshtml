@@ -11,7 +11,7 @@
         }
 
             .rounded-circle:hover {
-                transform: scale(1.5);
+                transform: scale(2.5);
             }
     </style>
 }
@@ -44,8 +44,8 @@
                             {
                                
                                 ++j;
-                                <li class="list-group-item"><img src="@Url.Content(@"~/images/")@item2.fphotoPath" class=" rounded-circle" style="width: 4rem;height:4rem;" alt="商品圖"></li>
-                                <li class="list-group-item">@j @item2.fname / 數量 @item2.fquentity / 已售 @item2.fsalesVolume</li>
+                                <li class="list-group-item"><img src="@Url.Content(@"~/images/")@item2.fphotoPath" class=" rounded-circle" style="width: 4rem;height:4rem;" alt="@item2.fname">@j /@item2.fname</li>
+                                <li class="list-group-item">數量 @item2.fquentity / 已售 @item2.fsalesVolume</li>
 
                             }
 

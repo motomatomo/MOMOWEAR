@@ -31,7 +31,7 @@
         list.Add(new SelectListItem()
         {
             Text = "類別代號" + item.fid + " " + item.fcategoryID + " " + item.fcategoryName,
-            Value = item.fcategoryName,
+            Value = item.fcategoryName.Trim(),
             Selected = false
         }
         );
@@ -73,167 +73,169 @@
 
 
 
-<div class="row">
+<div class="">
 
-    <a href="/Home/Signout" class="mx-1">登出</a>
+    <a href="/Home/Signout" class="my-5">登出</a>
     <hr />
-    <div class="table-responsive">
-        <p>
-            @Html.ActionLink("新增產品", "Create")
-        </p>
 
-        <br /><br />
-        <div class="">
-            @using (@Html.BeginForm())
-            {
-                <select id="mpick" name="mpick" class="form-control">
+    <p>
+        @Html.ActionLink("新增產品", "Create", "Product", new { @class = "btn btn-outline-dark" })
+    </p>
+
+    
+    <div class=" row mt-5 justify-content-start">
+
+        @using (@Html.BeginForm())
+        {<div>
+                <select id="mpick" name="mpick" class="form-control col-lg-3">
                     <option>選擇搜關鍵字分類</option>
                     <option value="商品名稱" name="ProductName">商品名稱</option>
                     <option value="商品類別" name="Gategory">商品類別</option>
                     <option value="顏色" name="Color">顏色</option>
                     <option value="庫存不足商品" name="SoldOut">庫存不足商品</option>
                 </select>
+            </div>
+         <div  class="col-12 col-lg-3">
+             @Html.DropDownList("fcategoryName",list, htmlAttributes: new
+             {
+                 @class = "form-control",
+            @style = "display:none"
+             })
 
-
-                @Html.DropDownList("fcategoryName", list, htmlAttributes: new
-                {
-                    @class = "form-control",
-               @style = "display:none"
-                })
-
-
-                <div class="col-12 col-lg-2 my-auto ">
+         </div>
+                <div class="col-12 col-lg-3">
                     <input type="text" name="txtKeyword" class="form-control" value="" id="txt" placeholder="請輸入關鍵字" />
                 </div>
 
-                <div class="col-4 col-lg-1 m">
+                <div class="col-4 col-lg-3 ">
                     <input type="submit" value="查詢" id="keyWorld" class="form-control" />
                 </div>
-                
-            }
-        </div>
-        <br /><br />
 
-        @if (TempData["err"] != null)
-        {
-            <div class="alert alert-danger"> @TempData["err"] </div>
-        }
+                }
+            </div>
+            <br /><br />
 
-
-        <table class="table align-middle">
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.FirstOrDefault().fserialNumber)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.FirstOrDefault().tcategory.fcategoryID)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.FirstOrDefault().fname)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.FirstOrDefault().fcolor)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.FirstOrDefault().fsize)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.FirstOrDefault().fquentity)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.FirstOrDefault().fdescribe)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.FirstOrDefault().fsalesVolume)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.FirstOrDefault().fprice)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.FirstOrDefault().fsalesdate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.FirstOrDefault().fsafetyStockLevel)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.FirstOrDefault().fmodifiedDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.FirstOrDefault().fbrand)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.FirstOrDefault().fphotoPath)
-                </th>
-
-                <th></th>
-            </tr>
-
-            @foreach (var item in Model)
+            @if (TempData["err"] != null)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.fserialNumber)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.tcategory.fcategoryID)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.fname)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.fcolor)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.fsize)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.fquentity)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.fdescribe)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.fsalesVolume)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.fprice)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.fsalesdate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.fsafetyStockLevel)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.fmodifiedDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.fbrand)
-                    </td>
-                    <td>
-                        @*@Html.DisplayFor(modelItem => item.fphotoPath)*@
-                        <img src="~/images/@item.fphotoPath" class="img-thumbnail" alt="產品圖" />
-                    </td>
-
-                    <td>
-                        @Html.ActionLink("修改", "Edit", new { id = item.fid }, new { @class = "btn btn-default" })
-                        @*@Html.ActionLink("Details", "Details", new { id = item.fid }) |*@
-                        @*@Html.ActionLink("刪除", "Delete", "Product", new { id = item.fid}, new { @class = "btn btn-default", onclick = "return confirm('確定刪除?')" })*@
-                        @using (@Html.BeginForm("Delete", "Product", FormMethod.Post))
-                        {
-                            @Html.Hidden("id", item.fid)
-                            <input type="submit" value="刪除" class="btn btn-default " id="SubmitBtn" onclick="return confirm('你確定要刪除?')" />
-                        }
-                    </td>
-                </tr>
+                <div class="alert alert-danger"> @TempData["err"] </div>
             }
 
-        </table>
-        @Html.PagedListPager((IPagedList)Model, page => Url.Action("List", new { page, keyword = Request.QueryString["txtKeyword"] }))
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FirstOrDefault().fserialNumber)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FirstOrDefault().tcategory.fcategoryID)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FirstOrDefault().fname)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FirstOrDefault().fcolor)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FirstOrDefault().fsize)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FirstOrDefault().fquentity)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FirstOrDefault().fdescribe)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FirstOrDefault().fsalesVolume)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FirstOrDefault().fprice)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FirstOrDefault().fsalesdate)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FirstOrDefault().fsafetyStockLevel)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FirstOrDefault().fmodifiedDate)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FirstOrDefault().fbrand)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FirstOrDefault().fphotoPath)
+                        </th>
+
+                        <th></th>
+                    </tr>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.fserialNumber)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.tcategory.fcategoryID)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.fname)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.fcolor)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.fsize)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.fquentity)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.fdescribe)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.fsalesVolume)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.fprice)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.fsalesdate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.fsafetyStockLevel)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.fmodifiedDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.fbrand)
+                            </td>
+                            <td>
+                                @*@Html.DisplayFor(modelItem => item.fphotoPath)*@
+                                <img src="~/images/@item.fphotoPath" class="img-thumbnail" alt="產品圖" />
+                            </td>
+
+                            <td>
+                                @Html.ActionLink("修改", "Edit", new { id = item.fid }, new { @class = "btn btn-outline-dark mb-2" })
+                                @*@Html.ActionLink("Details", "Details", new { id = item.fid }) |*@
+                                @*@Html.ActionLink("刪除", "Delete", "Product", new { id = item.fid}, new { @class = "btn btn-default", onclick = "return confirm('確定刪除?')" })*@
+                                @using (@Html.BeginForm("Delete", "Product", FormMethod.Post))
+                                {
+                                    @Html.Hidden("id", item.fid)
+                                    <input type="submit" value="刪除" class="btn btn-outline-danger " id="SubmitBtn" onclick="return confirm('確定要刪除?')" />
+                                }
+                            </td>
+                        </tr>
+                    }
+
+                </table>
+               
+                @Html.PagedListPager((IPagedList)Model, x => Url.Action("List", new { keyword = Request.QueryString["txtKeyword"], page=x }))
 
 
-    </div>
-</div>
+            </div>
+        </div>
 
 @section scripts {
     <script>
