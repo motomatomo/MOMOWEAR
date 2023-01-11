@@ -10,7 +10,17 @@
 @{
     ViewBag.Title = ViewBag.userName + "你好";
 }
-
+@section styles{
+    <style>
+        .img-fluid {
+            transition: transform 0.3s;
+        }
+        .img-fluid:hover {
+            transform: scale(3);
+         }
+    </style>
+    
+    }
 @{
     <link href="~/Content/PagedList.css" rel="stylesheet" />
 
@@ -136,7 +146,7 @@
 
 }
 
-<br />
+<br /> 
 <br />
 
 @if (TempData["err"] != null)
@@ -145,28 +155,30 @@
 }
 
 <div class="table-responsive">
-    <table class="table table-hover align-middle">
+    <table class="table table-hover table-image align-middle">
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().fserialNumber)
-            </th>
+            @*<th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().fserialNumber)
+        </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.FirstOrDefault().tcategory.fcategoryID)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.FirstOrDefault().fname)
             </th>
+
+            @*<th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().fsize)
+        </th>*@
+
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().fdescribe)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.FirstOrDefault().fcolor)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().fsize)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.FirstOrDefault().fquentity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().fdescribe)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.FirstOrDefault().fsalesVolume)
@@ -177,15 +189,15 @@
             <th>
                 @Html.DisplayNameFor(model => model.FirstOrDefault().fsalesdate)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().fsafetyStockLevel)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().fmodifiedDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().fbrand)
-            </th>
+            @*<th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().fsafetyStockLevel)
+        </th>*@
+            @*<th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().fmodifiedDate)
+        </th>*@
+            @*<th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().fbrand)
+        </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.FirstOrDefault().fphotoPath)
             </th>
@@ -195,62 +207,65 @@
 
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.fserialNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.tcategory.fcategoryID)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.fname)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.fcolor)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.fsize)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.fquentity)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.fdescribe)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.fsalesVolume)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.fprice)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.fsalesdate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.fsafetyStockLevel)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.fmodifiedDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.fbrand)
-                </td>
-                <td>
-                    @*@Html.DisplayFor(modelItem => item.fphotoPath)*@
-                    <img src="~/images/@item.fphotoPath" class="img-thumbnail" alt="產品圖" />
-                </td>
+    <tr>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.fserialNumber)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.tcategory.fcategoryID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fname)
+        </td>
 
-                <td>
-                    @Html.ActionLink("修改", "Edit", new { id = item.fid }, new { @class = "btn btn-outline-dark mb-2" })
-                    @*@Html.ActionLink("Details", "Details", new { id = item.fid }) |*@
-                    @*@Html.ActionLink("刪除", "Delete", "Product", new { id = item.fid}, new { @class = "btn btn-default", onclick = "return confirm('確定刪除?')" })*@
-                    @using (@Html.BeginForm("Delete", "Product", FormMethod.Post))
-                    {
-                        @Html.Hidden("id", item.fid)
-                        <input type="submit" value="刪除" class="btn btn-outline-danger " id="SubmitBtn" onclick="return confirm('確定要刪除?')" />
-                    }
-                </td>
-            </tr>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.fsize)
+        </td>*@
+
+        <td>
+            @Html.DisplayFor(modelItem => item.fdescribe)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fcolor)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fquentity)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fsalesVolume)
+        </td>
+        <td class="priceper">
+            @Html.DisplayFor(modelItem => item.fprice)
+
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fsalesdate)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.fsafetyStockLevel)
+        </td>*@
+        @*<td>
+            @Html.DisplayFor(modelItem => item.fmodifiedDate)
+        </td>*@
+        @*<td>
+            @Html.DisplayFor(modelItem => item.fbrand)
+        </td>*@
+        <td>
+            @*@Html.DisplayFor(modelItem => item.fphotoPath)*@
+            <img src="~/images/@item.fphotoPath" class="img-fluid" alt="產品圖" />
+        </td>
+
+        <td>
+            @Html.ActionLink("修改", "Edit", new { id = item.fid }, new { @class = "btn btn-outline-dark mb-2" })
+            @*@Html.ActionLink("Details", "Details", new { id = item.fid }) |*@
+            @*@Html.ActionLink("刪除", "Delete", "Product", new { id = item.fid}, new { @class = "btn btn-default", onclick = "return confirm('確定刪除?')" })*@
+            @using (@Html.BeginForm("Delete", "Product", FormMethod.Post))
+            {
+                @Html.Hidden("id", item.fid)
+                <input type="submit" value="刪除" class="btn btn-outline-danger " id="SubmitBtn" onclick="return confirm('確定要刪除?')" />
+            }
+        </td>
+    </tr>
         }
 
     </table>
@@ -317,8 +332,20 @@
             } else { $("#fcategoryName").hide(1000); }
         })
 
-
-
+         //售價去小數
+        var moneyPer = [];
+       
+          @foreach (var item in Model)
+        {
+            @:moneyPer.push("@Convert.ToDouble(@item.fprice)");
+           
+        }
+        var newmoneyPer = document.querySelectorAll('td.priceper');
+        for (let index in moneyPer)
+        {
+            newmoneyPer[index].innerHTML = moneyPer[index];
+        }
+       
     </script>
 
 }

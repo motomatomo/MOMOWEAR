@@ -32,7 +32,7 @@ namespace momoWear.Models
             [DisplayName("尺寸")]
             public string fsize { get; set; }
 
-            [DisplayName("數量")]
+            [DisplayName("庫存")]
             [Required(ErrorMessage = "數量為必填")]
             [Range(0,200,ErrorMessage = "{0} 必須在 {1}和{2}之間.") ]
             public Nullable<int> fquentity { get; set; }
@@ -40,7 +40,7 @@ namespace momoWear.Models
             [DisplayName("描述")]
             public string fdescribe { get; set; }
 
-            [DisplayName("已銷售量")]
+            [DisplayName("銷量")]
             [Range(0, 2000,ErrorMessage = "{0} 必須在 {1}和{2}之間.")]
            
             public Nullable<int> fsalesVolume { get; set; }

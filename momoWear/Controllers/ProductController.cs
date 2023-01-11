@@ -28,7 +28,7 @@ namespace momoWear.Controllers
             int currentPage;
             int pageSize = 20;
             //一定要設定這兩個值TempData["txtKeyword"] TempData["mpick"]
-            //讓他帶回VIEW才能在下關鍵字時搜尋的到
+            //讓他帶回VIEW才能在分頁時 搜尋的到關鍵字及下拉選單
             TempData["txtKeyword"] = txtKeyword;
             TempData["mpick"] = mpick;
             //GET分類名稱VALUE
