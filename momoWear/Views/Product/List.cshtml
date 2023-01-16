@@ -16,7 +16,7 @@
             transition: transform 0.3s;
         }
         .img-fluid:hover {
-            transform: scale(3);
+            transform: scale(2.5);
          }
     </style>
     
@@ -171,9 +171,9 @@
             @Html.DisplayNameFor(model => model.FirstOrDefault().fsize)
         </th>*@
 
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.FirstOrDefault().fdescribe)
-            </th>
+            </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.FirstOrDefault().fcolor)
             </th>
@@ -186,9 +186,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.FirstOrDefault().fprice)
             </th>
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.FirstOrDefault().fsalesdate)
-            </th>
+            </th>*@
             @*<th>
             @Html.DisplayNameFor(model => model.FirstOrDefault().fsafetyStockLevel)
         </th>*@
@@ -198,7 +198,7 @@
             @*<th>
             @Html.DisplayNameFor(model => model.FirstOrDefault().fbrand)
         </th>*@
-            <th>
+            <th class="col-md-2 col-12">
                 @Html.DisplayNameFor(model => model.FirstOrDefault().fphotoPath)
             </th>
 
@@ -222,9 +222,9 @@
             @Html.DisplayFor(modelItem => item.fsize)
         </td>*@
 
-        <td>
+        @*<td>
             @Html.DisplayFor(modelItem => item.fdescribe)
-        </td>
+        </td>*@
         <td>
             @Html.DisplayFor(modelItem => item.fcolor)
         </td>
@@ -238,9 +238,9 @@
             @Html.DisplayFor(modelItem => item.fprice)
 
         </td>
-        <td>
+        @*<td>
             @Html.DisplayFor(modelItem => item.fsalesdate)
-        </td>
+        </td>*@
         @*<td>
             @Html.DisplayFor(modelItem => item.fsafetyStockLevel)
         </td>*@
@@ -252,7 +252,7 @@
         </td>*@
         <td>
             @*@Html.DisplayFor(modelItem => item.fphotoPath)*@
-            <img src="~/images/@item.fphotoPath" class="img-fluid" alt="產品圖" />
+            <img src="~/images/@item.fphotoPath" class="img-fluid" alt="@item.fdescribe" />
         </td>
 
         <td>

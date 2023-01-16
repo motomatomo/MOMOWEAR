@@ -40,7 +40,7 @@
                         @foreach (var item2 in Model)
                         { //若TITLE 類別名包含 加入該類別產品
 
-                            if (name.Contains(@item2.fcategoryName))
+                            if (item.fcategoryName==(@item2.fcategoryName))
                             {
                                
                                 ++j;
